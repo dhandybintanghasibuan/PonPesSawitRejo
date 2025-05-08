@@ -36,7 +36,7 @@ h1, h2, h3, .hero-pattern h2, .hero-pattern span {
 
 /* === Border Section === */
 .islamic-border {
-  border-bottom: 3px solid #d4a76a;
+  border-top: 2px solid #0d4f9e; /* warna biru */
   position: relative;
 }
 .islamic-border:after {
@@ -122,9 +122,6 @@ h1, h2, h3, .hero-pattern h2, .hero-pattern span {
   z-index: 0;
 }
 
-/* === Testimonials Section === */
-.testimonial-bg {
-  background-image: url('data:image/svg+xml;base64,...');
-  background-repeat: repeat;
-  background-size: 80px;
+html {
+  scroll-behavior: smooth;
 }

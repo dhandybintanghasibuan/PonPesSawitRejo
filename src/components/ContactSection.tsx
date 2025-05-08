@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { sendContact } from "../action/sendContact";
 
 export default function ContactSection() {
   const [form, setForm] = useState({
@@ -9,6 +10,9 @@ export default function ContactSection() {
     subject: "",
     message: "",
   });
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -18,79 +22,87 @@ export default function ContactSection() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Pesan berhasil dikirim (simulasi).");
+    setStatus("loading");
+
+    const res = await sendContact({
+      nama: form.name,
+      email: form.email,
+      pesan: `Telp: ${form.phone}\nSubjek: ${form.subject}\n\n${form.message}`,
+    });
+
+    if (res.success) {
+      setStatus("success");
+      setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+    } else {
+      console.error("❌ Error Supabase:", res.error);
+      setStatus("error");
+    }
   };
 
   return (
-    <section id="contact" className="py-16 bg-white islamic-border">
+    <section id="kontak" className="py-20 bg-white islamic-border">
       <div className="container mx-auto px-4">
+        {/* Judul */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-green-900 mb-2">
             Hubungi Kami
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Silakan menghubungi kami untuk informasi lebih lanjut
+            Silakan hubungi kami untuk pertanyaan atau informasi lebih lanjut.
           </p>
-          <div className="w-24 h-1 bg-amber-700 mx-auto"></div>
+          <div className="w-24 h-1 bg-[#0d4f9e] mx-auto mt-4" />
         </div>
 
-        <div className="flex flex-col md:flex-row">
+        {/* Kotak Gabungan */}
+        <div className="bg-white rounded-xl border border-[#0d4f9e]/30 shadow-lg p-8 md:flex gap-8">
           {/* Info Kontak */}
-          <div className="md:w-1/2 mb-8 md:mb-0 md:pr-8 space-y-6">
-            <h3 className="text-2xl font-bold text-amber-800 mb-4">
+          <div className="md:w-1/2 space-y-6">
+            <h3 className="text-xl font-bold text-[#0d4f9e] mb-2">
               Informasi Kontak
             </h3>
-
-            <div className="flex items-start">
-              <div className="bg-amber-100 p-3 rounded-full mr-4">
-                <i className="fas fa-map-marker-alt text-amber-700"></i>
+            {[
+              {
+                icon: "map-marker-alt",
+                text: "Jl. Diski Glugur Kuta, Sawit Rejo, Kutalimbaru, Deli Serdang",
+              },
+              {
+                icon: "phone-alt",
+                text: "(061) 1234-5678 | 0812-3456-7890 (WA)",
+              },
+              { icon: "envelope", text: "pesantrensawitrejo@gmail.com" },
+              {
+                icon: "clock",
+                text: (
+                  <>
+                    Senin - Jumat: 08.00 - 16.00 WIB <br /> Sabtu: 08.00 - 12.00
+                    WIB
+                  </>
+                ),
+              },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-4">
+                <div className="bg-[#e0ecf9] p-3 rounded-full">
+                  <i className={`fas fa-${item.icon} text-[#0d4f9e]`}></i>
+                </div>
+                <p className="text-gray-800 text-sm">{item.text}</p>
               </div>
-              <p>
-                Jl. Diski Glugur Kuta, Sawit Rejo, Kec. Kutalimbaru, Kab. Deli
-                Serdang, Sumatera Utara
-              </p>
-            </div>
-
-            <div className="flex items-start">
-              <div className="bg-amber-100 p-3 rounded-full mr-4">
-                <i className="fas fa-phone-alt text-amber-700"></i>
-              </div>
-              <p>(061) 1234-5678 | 0812-3456-7890 (WA)</p>
-            </div>
-
-            <div className="flex items-start">
-              <div className="bg-amber-100 p-3 rounded-full mr-4">
-                <i className="fas fa-envelope text-amber-700"></i>
-              </div>
-              <p>pesantrensawitrejo@gmail.com</p>
-            </div>
-
-            <div className="flex items-start">
-              <div className="bg-amber-100 p-3 rounded-full mr-4">
-                <i className="fas fa-clock text-amber-700"></i>
-              </div>
-              <p>
-                Senin - Jumat: 08.00 - 16.00 WIB
-                <br />
-                Sabtu: 08.00 - 12.00 WIB
-              </p>
-            </div>
+            ))}
           </div>
 
           {/* Formulir Kontak */}
-          <div className="md:w-1/2">
-            <div className="bg-gray-50 rounded-lg p-6 shadow-md">
-              <h3 className="text-2xl font-bold text-amber-800 mb-4">
+          <div className="md:w-1/2 mt-10 md:mt-0">
+            <div className="bg-[#f6f9fd] p-4 rounded-lg shadow-md border border-[#0d4f9e]/20 w-full">
+              <h3 className="text-base font-bold text-[#0d4f9e] mb-3">
                 Formulir Kontak
               </h3>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className="space-y-3 text-sm">
                 {["name", "email", "phone"].map((field) => (
-                  <div className="mb-4" key={field}>
+                  <div key={field}>
                     <label
-                      className="block text-gray-700 font-medium mb-2 capitalize"
                       htmlFor={field}
+                      className="block text-gray-700 mb-1 capitalize"
                     >
                       {field === "phone"
                         ? "Nomor Telepon"
@@ -103,16 +115,14 @@ export default function ContactSection() {
                       name={field}
                       value={form[field as keyof typeof form]}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#0d4f9e] focus:outline-none"
                     />
                   </div>
                 ))}
 
-                <div className="mb-4">
-                  <label
-                    htmlFor="subject"
-                    className="block text-gray-700 font-medium mb-2"
-                  >
+                <div>
+                  <label htmlFor="subject" className="block text-gray-700 mb-1">
                     Subjek
                   </label>
                   <select
@@ -120,7 +130,8 @@ export default function ContactSection() {
                     name="subject"
                     value={form.subject}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#0d4f9e] focus:outline-none"
                   >
                     <option value="">Pilih subjek</option>
                     <option value="admisi">Informasi Pendaftaran</option>
@@ -129,29 +140,45 @@ export default function ContactSection() {
                   </select>
                 </div>
 
-                <div className="mb-4">
-                  <label
-                    htmlFor="message"
-                    className="block text-gray-700 font-medium mb-2"
-                  >
+                <div>
+                  <label htmlFor="message" className="block text-gray-700 mb-1">
                     Pesan
                   </label>
                   <textarea
                     id="message"
                     name="message"
-                    rows={4}
+                    rows={2}
                     value={form.message}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#0d4f9e] focus:outline-none"
                   ></textarea>
                 </div>
 
                 <button
                   type="submit"
-                  className="bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 px-6 rounded w-full"
+                  disabled={status === "loading"}
+                  className="w-full bg-[#0d4f9e] hover:bg-[#093e7a] text-white font-bold py-2 rounded-md transition duration-300"
                 >
-                  <i className="fas fa-paper-plane mr-2"></i> Kirim Pesan
+                  {status === "loading" ? (
+                    "Mengirim..."
+                  ) : (
+                    <>
+                      <i className="fas fa-paper-plane mr-2"></i> Kirim Pesan
+                    </>
+                  )}
                 </button>
+
+                {status === "success" && (
+                  <p className="mt-1 text-green-600 text-center">
+                    Pesan berhasil dikirim!
+                  </p>
+                )}
+                {status === "error" && (
+                  <p className="mt-1 text-red-600 text-center">
+                    Terjadi kesalahan. Silakan coba lagi.
+                  </p>
+                )}
               </form>
             </div>
           </div>

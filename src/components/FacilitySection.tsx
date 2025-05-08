@@ -1,5 +1,6 @@
 "use client";
 import { FC } from "react";
+import Image from "next/image";
 
 const facilities = [
   {
@@ -45,17 +46,19 @@ const facilities = [
     image: "/assets/fasilitas/klinik.jpg",
   },
   {
-    icon: "fa-water",
-    title: "Kolam Renang",
-    desc: "Kolam renang khusus untuk santri putra dan putri dengan jadwal terpisah.",
+    title: "Balai Latihan Kerja Komunitas",
+    desc: "Tempat pelatihan kerja untuk sertifikasi potensi dunia industri",
     image: "/assets/fasilitas/kolam-renang.jpg",
+    iconImage: "/assets/img/kemnaker.png",
   },
 ];
 
-
 const FacilitySection: FC = () => {
   return (
-    <section id="facility" className="py-16 bg-white islamic-border">
+    <section
+      id="fasilitas"
+      className="min-h-screen py-20 bg-white islamic-border flex items-center"
+    >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-green-900 mb-2">
@@ -65,22 +68,52 @@ const FacilitySection: FC = () => {
             Fasilitas lengkap untuk mendukung kegiatan belajar mengajar dan
             kehidupan santri
           </p>
-          <div className="w-24 h-1 bg-amber-700 mx-auto"></div>
+          <div className="w-24 h-1 bg-[#0d4f9e] mx-auto mt-4"></div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {facilities.map((item, i) => (
             <div
               key={i}
-              className="bg-gray-50 rounded-lg p-6 text-center islamic-card hover-scale"
+              className="group bg-white rounded-xl overflow-hidden shadow-md border border-[#0d4f9e]/30 hover:shadow-xl transition duration-300"
             >
-              <div className="bg-amber-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4">
-                <i className={`fas ${item.icon} text-amber-700 text-2xl`}></i>
+              {/* Gambar Atas */}
+              <div className="h-40 w-full overflow-hidden">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  width={400}
+                  height={200}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
-              <h3 className="text-xl font-bold text-green-900 mb-2">
-                {item.title}
-              </h3>
-              <p className="text-gray-700">{item.desc}</p>
+
+              {/* Isi */}
+              <div className="p-5 text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="bg-[#0d4f9e]/10 w-12 h-12 rounded-full flex items-center justify-center">
+                    {item.iconImage ? (
+                      <Image
+                        src={item.iconImage}
+                        alt={item.title}
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 object-contain"
+                      />
+                    ) : (
+                      <i
+                        className={`fas ${item.icon} text-[#0d4f9e] text-lg`}
+                      />
+                    )}
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-green-900 mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
             </div>
           ))}
         </div>

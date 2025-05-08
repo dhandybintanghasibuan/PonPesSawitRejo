@@ -24,32 +24,37 @@ const achievements = [
 
 const AchievementSection: FC = () => {
   return (
-    <section className="py-16 bg-[#f8f5ee] islamic-border">
+    <section
+      id="achievement"
+      className="min-h-screen py-20 bg-white islamic-border flex items-center"
+    >
       <div className="container mx-auto px-4">
+        {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-green-900 mb-2">
-            Prestasi
+            Prestasi Santri
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Capaian dan keberhasilan yang telah diraih santri Pondok Pesantren
-            Sawit Rejo
+            Capaian membanggakan yang diraih oleh para santri Pondok Pesantren
+            Sawit Rejo.
           </p>
-          <div className="w-24 h-1 bg-amber-700 mx-auto"></div>
+          <div className="w-24 h-1 bg-[#0d4f9e] mx-auto mt-4" />
         </div>
 
+        {/* Cards */}
         <div className="grid md:grid-cols-3 gap-8">
           {achievements.map((item, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg p-6 shadow-lg islamic-card hover-scale"
+              className="bg-gradient-to-br from-white via-blue-50 to-white border border-[#0d4f9e]/30 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
             >
               <div className="mb-4">
-                <h4 className="font-bold text-green-900 text-xl">
+                <h4 className="text-lg md:text-xl font-bold text-green-900">
                   {item.title}
                 </h4>
-                <p className="text-sm text-amber-700 mt-1">{item.by}</p>
+                <p className="text-sm text-[#0d4f9e] italic mt-1">{item.by}</p>
               </div>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-sm text-gray-700 leading-relaxed tracking-wide">
                 {item.description}
               </p>
             </div>
