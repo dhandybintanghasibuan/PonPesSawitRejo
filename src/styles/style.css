@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&family=Scheherazade+New:wght@400;700&display=swap');
+
+body {
+  font-family: 'poppins', sans-serif;
+  background-color: #f8f5ee;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, .hero-pattern h2, .hero-pattern span {
+  font-family: 'Playfair Display', serif;
+}
+
+.arabic-font {
+  font-family: 'Scheherazade New', serif;
+}
+
+/* === Navbar Animation (Desktop) === */
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.navbar-animate {
+  animation: fadeInDown 0.5s ease-in-out;
+}
+
+/* === Mobile Menu Slide (Triggered on Toggle) === */
+@keyframes slideDown {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s ease-out;
+}
+
+/* === Border Section === */
+.islamic-border {
+  border-bottom: 3px solid #d4a76a;
+  position: relative;
+}
+.islamic-border:after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: repeating-linear-gradient(to right, #d4a76a, #d4a76a 10px, transparent 10px, transparent 20px);
+}
+
+/* === Hover Cards & Buttons === */
+.hover-scale {
+  transition: transform 0.3s ease;
+}
+.hover-scale:hover {
+  transform: scale(1.03);
+}
+
+.quran-verse {
+  background: linear-gradient(135deg, rgba(212, 167, 106, 0.1), rgba(212, 167, 106, 0.2));
+}
+
+/* === Navbar Link Hover === */
+.nav-link {
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.3s;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #d4a76a;
+  transition: width 0.3s ease;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.active-nav {
+  color: #166534;
+  font-weight: 600;
+}
+.active-nav::after {
+  width: 100%;
+}
+
+/* === Mosque Icon === */
+.mosque-icon {
+  position: relative;
+}
+.mosque-icon::before {
+  content: '\f678';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 50%;
+  top: -20px;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: #d4a76a;
+}
+
+/* === Card Elevation === */
+.islamic-card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-top: 4px solid #d4a76a;
+  transition: box-shadow 0.3s ease;
+}
+.islamic-card:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* === Floating Mosque Icon === */
+.floating-mosque {
+  position: absolute;
+  opacity: 0.05;
+  z-index: 0;
+}
+
+/* === Testimonials Section === */
+.testimonial-bg {
+  background-image: url('data:image/svg+xml;base64,...');
+  background-repeat: repeat;
+  background-size: 80px;
+}

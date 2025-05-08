@@ -1,103 +1,177 @@
+"use client";
+
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import Image from "next/image";
+import AboutSection from "../components/AboutSection";
+import ProgramSection from "../components/ProgramSection";
+import FacilitySection from "../components/FacilitySection";
+import GallerySection from "../components/GallerySection";
+import AchievementSection from "../components/AchievementSection";
+import ContactSection from "../components/ContactSection";
+import MapSection from "../components/MapSection";
+import Footer from "../components/Footer";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <main className="text-gray-800">
+      {/* Navbar */}
+      <header className="bg-white shadow-md sticky top-0 z-50 navbar-animate">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="/assets/img/logopesantren.png"
+              alt="Logo Pondok"
+              width={48}
+              height={48}
+              className="h-12 w-auto"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className="leading-tight">
+              <h1 className="text-lg sm:text-xl font-bold text-green-800">
+                Pondok Pesantren Sawit Rejo
+              </h1>
+              <p className="text-xs sm:text-sm text-amber-800 font-semibold">
+                Kutalimbaru - Deli Serdang
+              </p>
+            </div>
+          </div>
+          <button
+            id="menu-toggle"
+            className="md:hidden text-amber-800 text-2xl focus:outline-none"
           >
-            Read our docs
+            <i className="fas fa-bars"></i>
+          </button>
+          <nav className="hidden md:flex gap-6 font-medium text-amber-900">
+            <a href="#beranda" className="hover:text-green-700 transition">
+              Beranda
+            </a>
+            <a href="#about" className="hover:text-green-700 transition">
+              Tentang
+            </a>
+            <a href="#program" className="hover:text-green-700 transition">
+              Program
+            </a>
+            <a href="#fasilitas" className="hover:text-green-700 transition">
+              Fasilitas
+            </a>
+            <a href="#galeri" className="hover:text-green-700 transition">
+              Galeri
+            </a>
+            <a href="#kontak" className="hover:text-green-700 transition">
+              Kontak
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section
+        id="home"
+        className="relative w-full h-screen min-h-[600px] overflow-hidden text-green-900"
+      >
+        <style>{`.fade-left { background: linear-gradient(to right, rgba(255, 250, 243, 0.95) 35%, rgba(255, 250, 243, 0.75) 60%, transparent 100%); backdrop-filter: blur(4px); }`}</style>
+        <Image
+          src="/assets/img/headerbg.png"
+          alt="Santri"
+          fill
+          className="object-cover object-[40%] z-0"
+        />
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-white/70 via-white/30 to-transparent backdrop-blur-sm" />
+        <div className="relative z-20 container mx-auto px-6 h-full flex items-center">
+          <div className="w-full md:w-3/5 lg:w-1/2 bg-white/30 backdrop-blur-md p-8 rounded-lg shadow-lg border border-amber-100">
+            <div className="flex items-center mb-4">
+              <div className="h-1 w-16 bg-amber-700 rounded-full" />
+              <p className="mx-3 text-amber-800 font-medium">
+                Pondok Pesantren
+              </p>
+              <div className="h-1 flex-grow bg-amber-700 rounded-full" />
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+              Sawit <span className="text-amber-700">Rejo</span>
+            </h1>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">
+              Membentuk Generasi{" "}
+              <span className="text-amber-700">Qur&apos;ani</span>{" "}
+              <span className="relative">
+                Berakhlak Mulia
+                <span className="absolute bottom-0 left-0 w-full h-1 bg-amber-500 rounded-full" />
+              </span>
+            </h2>
+            <p className="text-lg text-gray-800 mb-8 leading-relaxed">
+              Pondok Pesantren Sawit Rejo menyelenggarakan pendidikan Islam
+              terpadu yang mengintegrasikan ilmu agama dan umum dengan penekanan
+              pada pembentukan akhlak mulia dan kepribadian yang berlandaskan
+              Al-Qur&apos;an.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <a
+                href="#program"
+                className="group bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 px-6 rounded-lg shadow hover:shadow-lg transition duration-300 flex items-center"
+              >
+                <i className="fas fa-book-open mr-2"></i>
+                <span>Program Kami</span>
+              </a>
+              <a
+                href="#contact"
+                className="group bg-white hover:bg-gray-50 text-amber-800 font-bold py-3 px-6 rounded-lg shadow hover:shadow-lg transition duration-300 border border-amber-200 flex items-center"
+              >
+                <i className="fas fa-phone-alt mr-2"></i>
+                <span>Hubungi Kami</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Statistik */}
+          <div className="hidden lg:flex absolute bottom-25 right-10 z-30">
+            <div className="flex gap-6">
+              <StatCard title="10+" subtitle="Tahun Mengabdi" />
+              <StatCard title="70+" subtitle="Santri Aktif" />
+              <StatCard title="100%" subtitle="Berbasis Al-Qur'an" />
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20 animate-bounce hidden md:block">
+          <a
+            href="#program"
+            className="text-amber-800 hover:text-amber-700 transition-colors"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+              />
+            </svg>
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* === Tampilkan Section === */}
+      <AboutSection />
+      <ProgramSection />
+      <FacilitySection />
+      <GallerySection />
+      <AchievementSection />
+      <ContactSection />
+      <MapSection />
+      <Footer />
+    </main>
+  );
+}
+
+// Komponen kecil untuk statistik
+function StatCard({ title, subtitle }: { title: string; subtitle: string }) {
+  return (
+    <div className="bg-white/80 backdrop-blur-md p-4 rounded-lg shadow-md text-center">
+      <h3 className="text-3xl font-bold text-amber-700">{title}</h3>
+      <p className="text-sm text-green-900">{subtitle}</p>
     </div>
   );
 }
