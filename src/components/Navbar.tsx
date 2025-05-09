@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 
 const sections = [
   { name: "Tentang", href: "/#about", id: "about" },
+  { name: "Berita", href: "/#berita", id: "news"},
   { name: "Program", href: "/#program", id: "program" },
   { name: "Fasilitas", href: "/#fasilitas", id: "fasilitas" },
   { name: "Galeri", href: "/#galeri", id: "galeri" },

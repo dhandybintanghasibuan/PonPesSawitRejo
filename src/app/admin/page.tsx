@@ -1,24 +1,15 @@
 "use client";
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
 import {
-  FaUsers,
   FaBookOpen,
   FaCheckCircle,
   FaEdit,
   FaTrash,
   FaImage,
 } from "react-icons/fa";
-import Link from "next/link";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,63 +19,70 @@ const supabase = createClient(
 export default function AdminDashboard() {
   const [filter, setFilter] = useState("all");
   const [programs, setPrograms] = useState<any[]>([]);
+  const [contacts, setContacts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchPrograms = async () => {
     const { data, error } = await supabase
       .from("program")
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (!error && data) {
-      setPrograms(data);
-    }
+    if (!error && data) setPrograms(data);
     setLoading(false);
   };
 
+  const fetchContacts = async () => {
+    const { data, error } = await supabase
+      .from("contacts")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (!error && data) setContacts(data);
+  };
+
   useEffect(() => {
-    fetchData();
-    const channel = supabase
+    fetchPrograms();
+    fetchContacts();
+
+    const programChannel = supabase
       .channel("realtime:program")
       .on(
         "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "program",
-        },
-        () => fetchData()
+        { event: "*", schema: "public", table: "program" },
+        () => fetchPrograms()
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(programChannel);
     };
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (confirm("Yakin ingin menghapus program ini?")) {
-      const { error } = await supabase.from("program").delete().eq("id", id);
-      if (!error) fetchData();
-      else alert("Gagal menghapus: " + error.message);
-    }
+    const confirmDelete = confirm("Yakin ingin menghapus program ini?");
+    if (!confirmDelete) return;
+
+    const { error } = await supabase.from("program").delete().eq("id", id);
+    if (!error) fetchPrograms();
+    else alert("Gagal menghapus: " + error.message);
   };
 
   const filtered =
-    filter === "all" ? programs : programs.filter((p) => p.status === filter);
+    filter === "all"
+      ? programs
+      : programs.filter((item) => item.status === filter);
 
   const totalProgram = programs.length;
-  const totalPeserta = programs.reduce((sum, p) => sum + p.peserta, 0);
-  const totalAktif = programs.filter((p) => p.status === "Aktif").length;
+  const totalPeserta = programs.reduce((sum, d) => sum + (d.peserta || 0), 0);
+  const totalAktif = programs.filter((d) => d.status === "Aktif").length;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">
-        Dashboard Program
-      </h1>
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold text-gray-800">Dashboard Program</h1>
 
       {/* Statistik */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl shadow-md p-4 flex items-center gap-4">
           <div className="bg-[#0d4f9e] text-white p-3 rounded-full">
             <FaBookOpen />
@@ -95,16 +93,7 @@ export default function AdminDashboard() {
           </div>
         </div>
         <div className="bg-white rounded-xl shadow-md p-4 flex items-center gap-4">
-          <div className="bg-green-600 text-white p-3 rounded-full">
-            <FaUsers />
-          </div>
-          <div>
-            <p className="text-gray-500 text-sm">Total Peserta</p>
-            <h3 className="text-xl font-bold text-gray-800">{totalPeserta}</h3>
-          </div>
-        </div>
-        <div className="bg-white rounded-xl shadow-md p-4 flex items-center gap-4">
-          <div className="bg-yellow-500 text-white p-3 rounded-full">
+          <div className="bg-green-500 text-white p-3 rounded-full">
             <FaCheckCircle />
           </div>
           <div>
@@ -114,23 +103,8 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Grafik */}
-      <div className="bg-white rounded-xl shadow-md p-4 mb-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-2">
-          Peserta per Program
-        </h2>
-        <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={programs}>
-            <XAxis dataKey="nama" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="peserta" fill="#0d4f9e" />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-
       {/* Filter */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 flex-wrap">
         {["all", "Aktif", "Draft"].map((status) => (
           <button
             key={status}
@@ -146,9 +120,9 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* Tabel */}
-      <div className="bg-white rounded-xl shadow-md overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 text-sm">
+      {/* Tabel Program */}
+      <div className="bg-white rounded-xl shadow-md overflow-auto">
+        <table className="min-w-[1000px] w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50 text-gray-600">
             <tr>
               <th className="px-6 py-3 text-left font-medium">Gambar</th>
@@ -218,6 +192,26 @@ export default function AdminDashboard() {
           </tbody>
         </table>
       </div>
+
+      {/* Kontak Masuk Terbaru */}
+      <article className="bg-white rounded-xl shadow-md p-6">
+        <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          Kontak Masuk Terbaru
+        </h2>
+        {contacts.length === 0 ? (
+          <p className="text-gray-500 text-sm">Belum ada pesan masuk.</p>
+        ) : (
+          <ul className="divide-y divide-gray-200 text-sm">
+            {contacts.slice(0, 5).map((item) => (
+              <li key={item.id} className="py-3">
+                <p className="font-semibold text-[#0d4f9e]">{item.nama}</p>
+                <p className="text-gray-600">{item.email}</p>
+                <p className="text-gray-700 mt-1 line-clamp-2">{item.pesan}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </article>
     </div>
   );
 }

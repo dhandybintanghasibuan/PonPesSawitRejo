@@ -27,7 +27,7 @@ export default function RootLayout({
         />
       </head>
       <body className="text-gray-800 bg-[#f8f5ee]">
-        <Navbar /> {/* ✅ Navbar selalu tampil */}
+        <Navbar />
         <main>{children}</main>
         <div className="border-t border-[#0d4f9e]" />
       </body>
