@@ -1,68 +1,38 @@
 "use client";
-import { FC } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa";
+import { createClient } from "@supabase/supabase-js";
 
-const facilities = [
-  {
-    slug: "masjid",
-    icon: "fa-mosque",
-    title: "Masjid",
-    desc: "Masjid besar dengan kapasitas 500 jamaah untuk shalat berjamaah dan kegiatan ibadah lainnya.",
-    image: "/assets/fasilitas/masjid.jpg",
-  },
-  {
-    slug: "asrama",
-    icon: "fa-home",
-    title: "Asrama",
-    desc: "Asrama nyaman dengan kapasitas 20 santri per kamar, dilengkapi lemari dan meja belajar.",
-    image: "/assets/fasilitas/asrama.jpg",
-  },
-  {
-    slug: "kantin",
-    icon: "fa-utensils",
-    title: "Kantin & Dapur",
-    desc: "Kantin sehat menyediakan makanan halal dan bergizi untuk kebutuhan santri.",
-    image: "/assets/fasilitas/kantin.jpg",
-  },
-  {
-    slug: "perpustakaan",
-    icon: "fa-book",
-    title: "Perpustakaan",
-    desc: "Perpustakaan lengkap dengan koleksi buku agama, umum, dan referensi pendidikan.",
-    image: "/assets/fasilitas/perpustakaan.jpg",
-  },
-  {
-    slug: "lab-komputer",
-    icon: "fa-laptop",
-    title: "Lab Komputer",
-    desc: "Laboratorium komputer dengan 30 unit PC untuk pembelajaran teknologi informasi.",
-    image: "/assets/fasilitas/lab-komputer.jpg",
-  },
-  {
-    slug: "lapangan",
-    icon: "fa-basketball-ball",
-    title: "Lapangan Olahraga",
-    desc: "Lapangan serbaguna untuk futsal, basket, voli, dan kegiatan olahraga lainnya.",
-    image: "/assets/img/fasilitas/lapangan.jpg",
-  },
-  {
-    slug: "klinik",
-    icon: "fa-clinic-medical",
-    title: "Klinik Kesehatan",
-    desc: "Klinik dengan dokter jaga dan perawat untuk penanganan kesehatan santri.",
-    image: "/assets/fasilitas/klinik.jpg",
-  },
-  {
-    slug: "blkk",
-    title: "Balai Latihan Kerja Komunitas",
-    desc: "Tempat pelatihan kerja untuk sertifikasi potensi dunia industri",
-    image: "/assets/img/fasilitas/blk.jpg",
-    iconImage: "/assets/img/kemnaker.png",
-  },
-];
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
-const FacilitySection: FC = () => {
+type Facility = {
+  id: string;
+  nama: string;
+  deskripsi: string;
+  gambar_url: string;
+};
+
+export default function FacilitySection() {
+  const [facilities, setFacilities] = useState<Facility[]>([]);
+
+  const fetchFacilities = async () => {
+    const { data, error } = await supabase
+      .from("facilities")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (!error && data) setFacilities(data);
+  };
+
+  useEffect(() => {
+    fetchFacilities();
+  }, []);
+
   return (
     <section
       id="fasilitas"
@@ -81,55 +51,43 @@ const FacilitySection: FC = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {facilities.map((item, i) => (
-            <Link
-              key={i}
-              href={`/fasilitas/${item.slug}`}
-              className="group bg-white rounded-xl overflow-hidden shadow-md border border-[#0d4f9e]/30 hover:shadow-xl transition duration-300"
+          {facilities.slice(0, 8).map((item) => (
+            <div
+              key={item.id}
+              className="bg-white rounded-xl overflow-hidden shadow-md border border-[#0d4f9e]/30 hover:shadow-xl transition duration-300"
             >
-              {/* Gambar Atas */}
               <div className="h-40 w-full overflow-hidden">
                 <Image
-                  src={item.image}
-                  alt={item.title}
+                  src={item.gambar_url}
+                  alt={item.nama}
                   width={400}
                   height={200}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover transition-transform duration-300"
                 />
               </div>
-
-              {/* Isi */}
               <div className="p-5 text-center">
-                <div className="flex justify-center mb-4">
-                  <div className="bg-[#0d4f9e]/10 w-12 h-12 rounded-full flex items-center justify-center">
-                    {item.iconImage ? (
-                      <Image
-                        src={item.iconImage}
-                        alt={item.title}
-                        width={24}
-                        height={24}
-                        className="w-6 h-6 object-contain"
-                      />
-                    ) : (
-                      <i
-                        className={`fas ${item.icon} text-[#0d4f9e] text-lg`}
-                      />
-                    )}
-                  </div>
-                </div>
                 <h3 className="text-lg font-bold text-green-900 mb-2">
-                  {item.title}
+                  {item.nama}
                 </h3>
                 <p className="text-sm text-gray-700 leading-relaxed">
-                  {item.desc}
+                  {item.deskripsi}
                 </p>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
+
+        {facilities.length > 8 && (
+          <div className="mt-10 text-center">
+            <Link
+              href="/fasilitas"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0d4f9e] hover:bg-[#093e7a] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition duration-300"
+            >
+              Lihat Lebih Banyak <i className="fas fa-arrow-right"></i>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
-};
-
-export default FacilitySection;
+}

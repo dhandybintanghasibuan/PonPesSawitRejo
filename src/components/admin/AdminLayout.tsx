@@ -11,6 +11,7 @@ import {
   FaCog,
   FaSignOutAlt,
   FaNewspaper,
+  FaTools,
 } from "react-icons/fa";
 import Image from "next/image";
 import { createClient } from "@supabase/supabase-js";
@@ -24,8 +25,9 @@ const supabase = createClient(
 
 const menus = [
   { title: "Dashboard", href: "/admin", icon: <FaHome /> },
-  { title: "Berita", href: "/admin/berita", icon: <FaNewspaper/>},
+  { title: "Berita", href: "/admin/berita", icon: <FaNewspaper /> },
   { title: "Program", href: "/admin/program", icon: <FaBook /> },
+  { title: "Fasilitas", href: "/admin/fasilitas", icon: <FaTools /> },
   { title: "Galeri", href: "/admin/gallery", icon: <FaImages /> },
   { title: "Kontak", href: "/admin/kontak", icon: <FaInbox /> },
 ];
