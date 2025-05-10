@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import Linkify from "linkify-react";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -15,7 +16,11 @@ type NewsItem = {
   title: string;
   content: string;
   image_url?: string;
-  [key: string]: any;
+};
+
+const linkifyOptions = {
+  target: "_blank",
+  className: "text-blue-600 underline hover:text-blue-800",
 };
 
 export default function AdminNewsPage() {
@@ -40,11 +45,7 @@ export default function AdminNewsPage() {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (error) {
-      console.error("Error fetching news:", error.message);
-    } else {
-      setNewsList(data || []);
-    }
+    if (!error && data) setNewsList(data);
   };
 
   const handleChange = (
@@ -67,11 +68,10 @@ export default function AdminNewsPage() {
 
     if (error) throw error;
 
-    const {
-      data: { publicUrl },
-    } = supabase.storage.from("berita-images").getPublicUrl(filename);
-
-    return publicUrl;
+    const { data } = supabase.storage
+      .from("berita-images")
+      .getPublicUrl(filename);
+    return data.publicUrl;
   };
 
   const handleSubmit = async () => {
@@ -214,11 +214,15 @@ export default function AdminNewsPage() {
                     </div>
                   )}
                 </td>
-                <td className="px-6 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">
+                <td className="px-6 py-3 text-sm font-medium text-gray-900">
                   {item.title}
                 </td>
-                <td className="px-6 py-3 text-sm text-gray-700 max-w-xs truncate">
-                  {item.content}
+                <td className="px-6 py-3 text-sm text-gray-700 max-w-xs">
+                  <Linkify options={linkifyOptions}>
+                    {item.content.length > 100
+                      ? item.content.slice(0, 100) + "..."
+                      : item.content}
+                  </Linkify>
                 </td>
                 <td className="px-6 py-3 text-center">
                   <div className="flex justify-center gap-3">

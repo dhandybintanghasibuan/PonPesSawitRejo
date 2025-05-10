@@ -4,8 +4,8 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import { FaClock, FaUserGraduate } from "react-icons/fa";
 import { SiQuora } from "react-icons/si";
 import Image from "next/image";
-import NewsSection from "../components/NewsSection";
 import AboutSection from "../components/AboutSection";
+import NewsSection from "../components/NewsSection";
 import ProgramSection from "../components/ProgramSection";
 import FacilitySection from "../components/FacilitySection";
 import GallerySection from "../components/GallerySection";
@@ -116,11 +116,11 @@ export default function Home() {
       </section>
 
       {/* === Section lainnya dengan tinggi konsisten === */}
-      <section id="news" className="min-h-screen">
-        <NewsSection />
-      </section>
       <section id="about" className="min-h-screen">
         <AboutSection />
+      </section>
+      <section id="news" className="min-h-screen">
+        <NewsSection />
       </section>
       <section id="program" className="min-h-screen">
         <ProgramSection />

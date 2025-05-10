@@ -1,5 +1,13 @@
 import AdminLayoutWrapper from "./AdminLayoutWrapper";
 
+
+export const metadata = {
+  title: {
+    default: "Admin | Pondok Pesantren Sawit Rejo",
+    template: "%s | Admin PPSR",
+  },
+};
+
 export default function AdminRootLayout({
   children,
 }: {

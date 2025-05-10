@@ -25,7 +25,7 @@ export default function NewsSection() {
     const fetchNews = async () => {
       const { data, error } = await supabase
         .from("news")
-        .select("*")
+        .select("id, title, content, image_url, created_at")
         .order("created_at", { ascending: false })
         .limit(3);
 
@@ -70,7 +70,7 @@ export default function NewsSection() {
             {news.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-lg overflow-hidden shadow-md border border-gray-100 hover:shadow-lg transition-all islamic-card"
+                className="bg-white rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-all flex flex-col"
               >
                 {item.image_url ? (
                   <img
@@ -79,23 +79,30 @@ export default function NewsSection() {
                     className="w-full h-48 object-cover"
                   />
                 ) : (
-                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">
-                    Tidak ada gambar
+                  <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-500 text-sm">
+                    Gambar tidak tersedia
                   </div>
                 )}
-                <div className="p-5">
+                <div className="p-5 flex flex-col flex-grow">
                   <h3 className="text-lg font-semibold text-green-800 mb-2 line-clamp-2">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-gray-600 line-clamp-3 mb-4">
-                    {item.content}
+                  <p className="text-sm text-gray-600 line-clamp-3 mb-4 flex-grow">
+                    {item.content
+                      ? item.content.replace(/<[^>]+>/g, "").slice(0, 100) +
+                        "..."
+                      : "Konten tidak tersedia."}
                   </p>
-                  <Link
-                    href={`/berita/${item.id}`}
-                    className="inline-block mt-2 px-4 py-2 bg-[#0d4f9e] text-white rounded-md text-sm font-semibold shadow hover:bg-[#093c7e] transition duration-200"
-                  >
-                    Baca Selengkapnya →
-                  </Link>
+
+                  {/* Tombol mini */}
+                  <div className="mt-auto">
+                    <Link
+                      href={`/berita/${encodeURIComponent(item.id)}`}
+                      className="inline-block px-3 py-1.5 bg-[#0d4f9e] text-white rounded text-sm font-medium hover:bg-[#093c7e] transition"
+                    >
+                      Baca Selengkapnya →
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
