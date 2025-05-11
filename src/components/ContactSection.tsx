@@ -10,6 +10,7 @@ export default function ContactSection() {
     subject: "",
     message: "",
   });
+
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -58,8 +59,8 @@ export default function ContactSection() {
         {/* Kotak Gabungan */}
         <div className="bg-white rounded-xl border border-[#0d4f9e]/30 shadow-lg p-8 md:flex gap-8">
           {/* Info Kontak */}
-          <div className="md:w-1/2 space-y-6">
-            <h3 className="text-xl font-bold text-[#0d4f9e] mb-2">
+          <div className="md:w-1/2 space-y-6 mb-10 md:mb-0">
+            <h3 className="text-xl font-bold text-[#0d4f9e] mb-4">
               Informasi Kontak
             </h3>
             {[
@@ -69,9 +70,12 @@ export default function ContactSection() {
               },
               {
                 icon: "phone-alt",
-                text: "(061) 1234-5678 | 0812-3456-7890 (WA)",
+                text: "0821-6653-5542",
               },
-              { icon: "envelope", text: "pesantrensawitrejo@gmail.com" },
+              {
+                icon: "envelope",
+                text: "pesantrensawitrejo@gmail.com",
+              },
               {
                 icon: "clock",
                 text: (
@@ -82,17 +86,21 @@ export default function ContactSection() {
                 ),
               },
             ].map((item, i) => (
-              <div key={i} className="flex items-start gap-4">
-                <div className="bg-[#e0ecf9] p-3 rounded-full">
-                  <i className={`fas fa-${item.icon} text-[#0d4f9e]`}></i>
+              <div key={i} className="flex items-center gap-4">
+                <div className="bg-[#e0ecf9] p-3 rounded-full min-w-[44px] h-[44px] flex items-center justify-center">
+                  <i
+                    className={`fas fa-${item.icon} text-[#0d4f9e] text-lg`}
+                  ></i>
                 </div>
-                <p className="text-gray-800 text-sm">{item.text}</p>
+                <p className="text-gray-800 text-sm leading-relaxed">
+                  {item.text}
+                </p>
               </div>
             ))}
           </div>
 
           {/* Formulir Kontak */}
-          <div className="md:w-1/2 mt-10 md:mt-0">
+          <div className="md:w-1/2">
             <div className="bg-[#f6f9fd] p-4 rounded-lg shadow-md border border-[#0d4f9e]/20 w-full">
               <h3 className="text-base font-bold text-[#0d4f9e] mb-3">
                 Formulir Kontak
@@ -187,3 +195,4 @@ export default function ContactSection() {
     </section>
   );
 }
+  

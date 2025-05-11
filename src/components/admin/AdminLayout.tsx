@@ -8,7 +8,6 @@ import {
   FaImages,
   FaInbox,
   FaChalkboardTeacher,
-  FaCog,
   FaSignOutAlt,
   FaNewspaper,
   FaTools,
@@ -17,18 +16,18 @@ import Image from "next/image";
 import { createClient } from "@supabase/supabase-js";
 import "@/app/globals.css";
 
-// Supabase Client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
 const menus = [
-  { title: "Dashboard", href: "/admin", icon: <FaHome /> },
+  { title: "Beranda", href: "/admin", icon: <FaHome /> },
   { title: "Berita", href: "/admin/berita", icon: <FaNewspaper /> },
   { title: "Program", href: "/admin/program", icon: <FaBook /> },
   { title: "Fasilitas", href: "/admin/fasilitas", icon: <FaTools /> },
-  { title: "Galeri", href: "/admin/gallery", icon: <FaImages /> },
+  { title: "Galeri", href: "/admin/galeri", icon: <FaImages /> },
+  { title: "Prestasi", href: "/admin/prestasi", icon: <FaChalkboardTeacher /> },
   { title: "Kontak", href: "/admin/kontak", icon: <FaInbox /> },
 ];
 
@@ -48,15 +47,14 @@ export default function AdminLayout({
   return (
     <div className="flex min-h-screen bg-[#f7f9fc] text-gray-800">
       {/* Sidebar */}
-      <aside className="w-24 bg-white border-r border-gray-200 shadow-sm flex flex-col justify-between py-6 items-center">
-        {/* TOP: Logo + Menu */}
+      <aside className="w-20 h-screen bg-white border-r border-gray-200 shadow-sm flex flex-col justify-between items-center fixed py-4">
+        {/* Logo */}
         <div className="flex flex-col items-center gap-6">
-          {/* Logo */}
           <Image
             src="/assets/img/logopesantren.png"
             alt="Logo"
-            width={50}
-            height={50}
+            width={40}
+            height={40}
             className="rounded-full border"
           />
 
@@ -68,14 +66,14 @@ export default function AdminLayout({
                 <Link
                   key={i}
                   href={menu.href}
-                  className={`w-[90%] py-3 px-2 flex flex-col items-center rounded-xl transition-all ${
+                  className={`w-[90%] py-2 px-1 flex flex-col items-center rounded-lg transition-all ${
                     active
-                      ? "bg-[#0d4f9e] text-white shadow-md"
+                      ? "bg-[#0d4f9e] text-white shadow"
                       : "text-gray-500 hover:bg-gray-100 hover:text-[#0d4f9e]"
                   }`}
                 >
-                  <div className="text-xl mb-1">{menu.icon}</div>
-                  <div className="text-[11px] font-semibold text-center leading-tight">
+                  <div className="text-base">{menu.icon}</div>
+                  <div className="text-[10px] font-semibold text-center leading-tight">
                     {menu.title}
                   </div>
                 </Link>
@@ -84,14 +82,14 @@ export default function AdminLayout({
           </nav>
         </div>
 
-        {/* BOTTOM: Logout */}
-        <div className="w-full flex justify-center mt-6">
+        {/* Logout Button */}
+        <div className="w-full px-2 pb-4">
           <button
             onClick={handleLogout}
-            className="w-[90%] py-3 flex flex-col items-center rounded-xl text-gray-500 hover:text-red-600 hover:bg-gray-100 transition-all"
+            className="w-full py-2 flex flex-col items-center text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-md transition-all"
           >
-            <FaSignOutAlt className="text-xl mb-1" />
-            <span className="text-[11px] font-semibold text-center leading-tight">
+            <FaSignOutAlt className="text-base mb-1" />
+            <span className="text-[10px] font-semibold text-center leading-tight">
               Logout
             </span>
           </button>
@@ -99,7 +97,7 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 px-4 md:px-10 py-6">{children}</main>
+      <main className="ml-20 flex-1 px-4 md:px-10 py-6">{children}</main>
     </div>
   );
 }

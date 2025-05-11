@@ -13,7 +13,6 @@ const supabase = createClient(
 export default function ProgramSection() {
   const [programs, setPrograms] = useState<any[]>([]);
 
-  // Ambil data program
   const fetchPrograms = async () => {
     const { data, error } = await supabase.from("program").select("*");
     if (!error && data) setPrograms(data);
@@ -69,10 +68,7 @@ export default function ProgramSection() {
           <div className="grid md:grid-cols-3 gap-8">
             {programs.map((program, idx) => (
               <Link
-                href={`/program/${
-                  program.slug ||
-                  program.nama.toLowerCase().replace(/\s+/g, "-")
-                }`}
+                href={`/program/${program.id}`}
                 key={idx}
                 className="group transition-transform transform hover:scale-[1.02]"
               >

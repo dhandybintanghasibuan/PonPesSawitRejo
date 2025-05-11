@@ -11,6 +11,7 @@ const sections = [
   { name: "Program", href: "/#program", id: "program" },
   { name: "Fasilitas", href: "/#fasilitas", id: "fasilitas" },
   { name: "Galeri", href: "/#galeri", id: "galeri" },
+  { name: "Prestasi", href: "/#prestasi", id:"prestasi"},
   { name: "Kontak", href: "/#kontak", id: "kontak" },
 ];
 

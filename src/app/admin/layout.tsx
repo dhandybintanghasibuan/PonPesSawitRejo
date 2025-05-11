@@ -1,23 +1,20 @@
-import AdminLayoutWrapper from "./AdminLayoutWrapper";
+import type { Metadata } from "next";
 
-
-export const metadata = {
+export const metadata: Metadata = {
   title: {
     default: "Admin | Pondok Pesantren Sawit Rejo",
     template: "%s | Admin PPSR",
   },
 };
 
-export default function AdminRootLayout({
+export default function AdminLayoutRoot({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <html lang="id">
-      <body className="bg-gray-100">
-        <AdminLayoutWrapper>{children}</AdminLayoutWrapper>
-      </body>
+      <body className="bg-gray-100">{children}</body>
     </html>
   );
 }

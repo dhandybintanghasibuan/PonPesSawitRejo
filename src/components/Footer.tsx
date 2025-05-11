@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-green-900 text-white py-12">
@@ -15,66 +17,82 @@ export default function Footer() {
               luas, dan bermanfaat bagi umat.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="hover:text-amber-400">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-amber-400"
+              >
                 <i className="fab fa-facebook-f"></i>
               </a>
-              <a href="#" className="hover:text-amber-400">
+              <a
+                href="https://www.instagram.com/generus.bangsa?igsh=MTA2bDllNGprNWY2eQ=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-amber-400"
+              >
                 <i className="fab fa-instagram"></i>
               </a>
-              <a href="#" className="hover:text-amber-400">
+              <a
+                href="https://youtube.com/@ldiitv?si=nJx7jdm2yj_tEuJ0"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-amber-400"
+              >
                 <i className="fab fa-youtube"></i>
               </a>
             </div>
           </div>
 
-          {/* Kolom 2 */}
+          {/* Kolom 2 - Tautan Cepat */}
           <div>
             <h3 className="text-xl font-bold mb-4">Tautan Cepat</h3>
             <ul className="space-y-2">
               {[
-                "Beranda",
-                "Tentang",
-                "Program",
-                "Fasilitas",
-                "Galeri",
-                "Kontak",
-              ].map((link) => (
-                <li key={link}>
-                  <a
-                    href={`#${link.toLowerCase()}`}
+                { label: "Beranda", href: "/" },
+                { label: "Tentang", href: "#about" },
+                { label: "Berita", href: "#berita" },
+                { label: "Program", href: "#program" },
+                { label: "Fasilitas", href: "#fasilitas" },
+                { label: "Galeri", href: "#galeri" },
+                { label: "Prestasi", href: "#prestasi" },
+                { label: "Kontak", href: "#kontak" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
                     className="hover:text-amber-400 transition duration-300"
                   >
-                    {link}
-                  </a>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Kolom 3 */}
+          {/* Kolom 3 - Program Unggulan */}
           <div>
             <h3 className="text-xl font-bold mb-4">Program Unggulan</h3>
             <ul className="space-y-2">
               {[
-                "Tahfidz Al-Qur'an",
-                "Pendidikan Diniyah",
-                "Sekolah Formal",
-                "Bahasa Arab & Inggris",
-                "Ekstrakurikuler",
+                { label: "Tahfidz Al-Qur'an", slug: "tahfidz" },
+                { label: "Pendidikan Diniyah", slug: "diniyah" },
+                { label: "Sekolah Formal", slug: "formal" },
+                { label: "Ekstrakurikuler", slug: "ekstrakurikuler" },
               ].map((program) => (
-                <li key={program}>
-                  <a
-                    href="#"
+                <li key={program.slug}>
+                  <Link
+                    href={`/program/${program.slug}`}
                     className="hover:text-amber-400 transition duration-300"
                   >
-                    {program}
-                  </a>
+                    {program.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Kolom 4 */}
+          {/* Kolom 4 - Kontak */}
           <div>
             <h3 className="text-xl font-bold mb-4">Kontak Kami</h3>
             <ul className="space-y-3 text-sm">
@@ -87,7 +105,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center">
                 <i className="fas fa-phone-alt mr-3 text-amber-400"></i>
-                <span>(061) 1234-5678</span>
+                <span>0821-6653-5542</span>
               </li>
               <li className="flex items-center">
                 <i className="fas fa-envelope mr-3 text-amber-400"></i>
@@ -98,7 +116,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-green-800 mt-8 pt-8 text-center">
-          <p>&copy; 2025 Pondok Pesantren Sawit Rejo. All Rights Reserved.</p>
+          <p>&copy; 2025 Pondok Pesantren Sawit Rejo.</p>
         </div>
       </div>
     </footer>

@@ -1,31 +1,41 @@
 "use client";
-import { FC } from "react";
 
-const achievements = [
-  {
-    title: "Juara 1 MTQ Tingkat Kabupaten",
-    by: "Oleh: M. Zaidan (Santri Kelas 11)",
-    description:
-      "Dalam lomba Musabaqah Tilawatil Qur’an tingkat Kabupaten Deli Serdang 2024, Zaidan berhasil menjadi juara pertama dalam kategori tilawah remaja.",
-  },
-  {
-    title: "100% Lulus Ujian Tahfidz",
-    by: "Angkatan 2023",
-    description:
-      "Seluruh santri kelas akhir tahun ajaran 2022/2023 dinyatakan lulus ujian tahfidz 5–30 juz dengan predikat Mumtaz dan Jayyid Jiddan.",
-  },
-  {
-    title: "Peringkat 1 Lomba Cerdas Cermat",
-    by: "Tingkat Provinsi Sumatera Utara",
-    description:
-      "Tim santri putri berhasil meraih juara pertama dalam lomba Cerdas Cermat Pendidikan Islam antar pondok pesantren se-Sumatera Utara tahun 2023.",
-  },
-];
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { createClient } from "@supabase/supabase-js";
 
-const AchievementSection: FC = () => {
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+type Prestasi = {
+  id: string;
+  judul: string;
+  deskripsi: string;
+  gambar_url?: string;
+};
+
+export default function AchievementSection() {
+  const [prestasi, setPrestasi] = useState<Prestasi[]>([]);
+
+  useEffect(() => {
+    fetchPrestasi();
+  }, []);
+
+  const fetchPrestasi = async () => {
+    const { data, error } = await supabase
+      .from("prestasi")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (!error && data) setPrestasi(data);
+  };
+
   return (
     <section
-      id="achievement"
+      id="prestasi"
       className="min-h-screen py-20 bg-white islamic-border flex items-center"
     >
       <div className="container mx-auto px-4">
@@ -38,31 +48,51 @@ const AchievementSection: FC = () => {
             Capaian membanggakan yang diraih oleh para santri Pondok Pesantren
             Sawit Rejo.
           </p>
-          <div className="w-24 h-1 bg-[#0d4f9e] mx-auto mt-4" />
+          <div className="w-24 h-1 bg-[#0d4f9e] mx-auto mt-4"></div>
         </div>
 
-        {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {achievements.map((item, index) => (
+        {/* Prestasi Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {prestasi.slice(0, 8).map((item) => (
             <div
-              key={index}
-              className="bg-gradient-to-br from-white via-blue-50 to-white border border-[#0d4f9e]/30 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+              key={item.id}
+              className="bg-white rounded-xl overflow-hidden shadow-md border border-[#0d4f9e]/30 hover:shadow-xl transition duration-300"
             >
-              <div className="mb-4">
-                <h4 className="text-lg md:text-xl font-bold text-green-900">
-                  {item.title}
-                </h4>
-                <p className="text-sm text-[#0d4f9e] italic mt-1">{item.by}</p>
+              {item.gambar_url && (
+                <div className="h-40 w-full overflow-hidden">
+                  <Image
+                    src={item.gambar_url}
+                    alt={item.judul}
+                    width={400}
+                    height={200}
+                    className="w-full h-full object-cover transition-transform duration-300"
+                  />
+                </div>
+              )}
+              <div className="p-5 text-center">
+                <h3 className="text-lg font-bold text-green-900 mb-2">
+                  {item.judul}
+                </h3>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  {item.deskripsi}
+                </p>
               </div>
-              <p className="text-sm text-gray-700 leading-relaxed tracking-wide">
-                {item.description}
-              </p>
             </div>
           ))}
         </div>
+
+        {/* Tombol Lihat Lebih Banyak */}
+        {prestasi.length > 8 && (
+          <div className="mt-10 text-center">
+            <Link
+              href="/prestasi"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0d4f9e] hover:bg-[#093e7a] text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition duration-300"
+            >
+              Lihat Lebih Banyak <i className="fas fa-arrow-right"></i>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
-};
-
-export default AchievementSection;
+}

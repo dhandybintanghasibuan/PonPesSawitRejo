@@ -16,7 +16,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export default function AdminDashboard() {
+export default function AdminDashboardPage() {
   const [filter, setFilter] = useState("all");
   const [programs, setPrograms] = useState<any[]>([]);
   const [contacts, setContacts] = useState<any[]>([]);
@@ -45,17 +45,17 @@ export default function AdminDashboard() {
     fetchPrograms();
     fetchContacts();
 
-    const programChannel = supabase
+    const channel = supabase
       .channel("realtime:program")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "program" },
-        () => fetchPrograms()
+        fetchPrograms
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(programChannel);
+      supabase.removeChannel(channel);
     };
   }, []);
 
@@ -69,12 +69,9 @@ export default function AdminDashboard() {
   };
 
   const filtered =
-    filter === "all"
-      ? programs
-      : programs.filter((item) => item.status === filter);
+    filter === "all" ? programs : programs.filter((p) => p.status === filter);
 
   const totalProgram = programs.length;
-  const totalPeserta = programs.reduce((sum, d) => sum + (d.peserta || 0), 0);
   const totalAktif = programs.filter((d) => d.status === "Aktif").length;
 
   return (
@@ -135,8 +132,14 @@ export default function AdminDashboard() {
           <tbody className="divide-y divide-gray-200">
             {loading ? (
               <tr>
-                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={5} className="text-center px-6 py-4 text-gray-500">
                   Memuat data...
+                </td>
+              </tr>
+            ) : filtered.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="text-center px-6 py-4 text-gray-500">
+                  Tidak ada program ditemukan.
                 </td>
               </tr>
             ) : (
@@ -150,12 +153,12 @@ export default function AdminDashboard() {
                         className="w-14 h-14 object-cover rounded-lg"
                       />
                     ) : (
-                      <div className="w-14 h-14 flex items-center justify-center bg-gray-200 rounded-lg text-gray-500">
+                      <div className="w-14 h-14 bg-gray-200 flex items-center justify-center rounded-lg text-gray-500">
                         <FaImage />
                       </div>
                     )}
                   </td>
-                  <td className="px-6 py-4 font-medium text-gray-800">
+                  <td className="px-6 py-4 font-semibold text-gray-800">
                     {item.nama}
                   </td>
                   <td className="px-6 py-4">
@@ -169,7 +172,7 @@ export default function AdminDashboard() {
                       {item.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4">{item.peserta}</td>
+                  <td className="px-6 py-4">{item.peserta || 0}</td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-2">
                       <Link
