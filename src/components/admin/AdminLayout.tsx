@@ -11,6 +11,7 @@ import {
   FaSignOutAlt,
   FaNewspaper,
   FaTools,
+  FaFutbol,
 } from "react-icons/fa";
 import Image from "next/image";
 import { createClient } from "@supabase/supabase-js";
@@ -28,8 +29,10 @@ const menus = [
   { title: "Fasilitas", href: "/admin/fasilitas", icon: <FaTools /> },
   { title: "Galeri", href: "/admin/galeri", icon: <FaImages /> },
   { title: "Prestasi", href: "/admin/prestasi", icon: <FaChalkboardTeacher /> },
+  { title: "Ekskul", href: "/admin/ekstrakurikuler",icon: <FaFutbol />, },
   { title: "Kontak", href: "/admin/kontak", icon: <FaInbox /> },
 ];
+
 
 export default function AdminLayout({
   children,
@@ -44,60 +47,69 @@ export default function AdminLayout({
     router.push("/admin/login");
   };
 
+  // Deteksi apakah halaman login
+  const isLoginPage = pathname === "/admin/login";
+
   return (
     <div className="flex min-h-screen bg-[#f7f9fc] text-gray-800">
-      {/* Sidebar */}
-      <aside className="w-20 h-screen bg-white border-r border-gray-200 shadow-sm flex flex-col justify-between items-center fixed py-4">
-        {/* Logo */}
-        <div className="flex flex-col items-center gap-6">
-          <Image
-            src="/assets/img/logopesantren.png"
-            alt="Logo"
-            width={40}
-            height={40}
-            className="rounded-full border"
-          />
+      {/* Sidebar hanya muncul kalau bukan halaman login */}
+      {!isLoginPage && (
+        <aside className="w-20 h-screen bg-white border-r border-gray-200 shadow-sm flex flex-col justify-between items-center fixed py-4">
+          {/* Logo */}
+          <div className="flex flex-col items-center gap-6">
+            <Image
+              src="/assets/img/logopesantren.png"
+              alt="Logo"
+              width={40}
+              height={40}
+              className="rounded-full border"
+            />
 
-          {/* Menu List */}
-          <nav className="flex flex-col gap-4 w-full items-center">
-            {menus.map((menu, i) => {
-              const active = pathname === menu.href;
-              return (
-                <Link
-                  key={i}
-                  href={menu.href}
-                  className={`w-[90%] py-2 px-1 flex flex-col items-center rounded-lg transition-all ${
-                    active
-                      ? "bg-[#0d4f9e] text-white shadow"
-                      : "text-gray-500 hover:bg-gray-100 hover:text-[#0d4f9e]"
-                  }`}
-                >
-                  <div className="text-base">{menu.icon}</div>
-                  <div className="text-[10px] font-semibold text-center leading-tight">
-                    {menu.title}
-                  </div>
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
+            {/* Menu List */}
+            <nav className="flex flex-col gap-4 w-full items-center">
+              {menus.map((menu, i) => {
+                const active = pathname === menu.href;
+                return (
+                  <Link
+                    key={i}
+                    href={menu.href}
+                    className={`w-[90%] py-2 px-1 flex flex-col items-center rounded-lg transition-all ${
+                      active
+                        ? "bg-[#0d4f9e] text-white shadow"
+                        : "text-gray-500 hover:bg-gray-100 hover:text-[#0d4f9e]"
+                    }`}
+                  >
+                    <div className="text-base">{menu.icon}</div>
+                    <div className="text-[10px] font-semibold text-center leading-tight">
+                      {menu.title}
+                    </div>
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
 
-        {/* Logout Button */}
-        <div className="w-full px-2 pb-4">
-          <button
-            onClick={handleLogout}
-            className="w-full py-2 flex flex-col items-center text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-md transition-all"
-          >
-            <FaSignOutAlt className="text-base mb-1" />
-            <span className="text-[10px] font-semibold text-center leading-tight">
-              Logout
-            </span>
-          </button>
-        </div>
-      </aside>
+          {/* Logout Button */}
+          <div className="w-full px-2 pb-4">
+            <button
+              onClick={handleLogout}
+              className="w-full py-2 flex flex-col items-center text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-md transition-all"
+            >
+              <FaSignOutAlt className="text-base mb-1" />
+              <span className="text-[10px] font-semibold text-center leading-tight">
+                Logout
+              </span>
+            </button>
+          </div>
+        </aside>
+      )}
 
       {/* Main Content */}
-      <main className="ml-20 flex-1 px-4 md:px-10 py-6">{children}</main>
+      <main
+        className={`${!isLoginPage ? "ml-20" : ""} flex-1 px-4 md:px-10 py-6`}
+      >
+        {children}
+      </main>
     </div>
   );
 }

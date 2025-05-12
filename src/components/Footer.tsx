@@ -72,18 +72,17 @@ export default function Footer() {
 
           {/* Kolom 3 - Program Unggulan */}
           <div>
-            <h3 className="text-xl font-bold mb-4">Program Unggulan</h3>
-            <ul className="space-y-2">
+            <h3 className="text-xl font-bold mb-4 text-white">
+              Program Lainnya
+            </h3>
+            <ul className="space-y-2 text-white">
               {[
-                { label: "Tahfidz Al-Qur'an", slug: "tahfidz" },
-                { label: "Pendidikan Diniyah", slug: "diniyah" },
-                { label: "Sekolah Formal", slug: "formal" },
-                { label: "Ekstrakurikuler", slug: "ekstrakurikuler" },
+                { label: "Ekstrakurikuler", slug: "/ekstrakurikuler" },
               ].map((program) => (
                 <li key={program.slug}>
                   <Link
-                    href={`/program/${program.slug}`}
-                    className="hover:text-amber-400 transition duration-300"
+                    href={program.slug}
+                    className="hover:text-amber-300 transition duration-300"
                   >
                     {program.label}
                   </Link>

@@ -10,22 +10,22 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-type Prestasi = {
+type Ekstra = {
   id: string;
-  judul: string;
+  nama: string;
   deskripsi: string;
   gambar_url?: string;
   created_at?: string;
 };
 
-export default function AdminPrestasiPage() {
-  const [data, setData] = useState<Prestasi[]>([]);
+export default function AdminEkstrakurikulerPage() {
+  const [data, setData] = useState<Ekstra[]>([]);
   const [formVisible, setFormVisible] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [formData, setFormData] = useState<Prestasi>({
+  const [formData, setFormData] = useState<Ekstra>({
     id: "",
-    judul: "",
+    nama: "",
     deskripsi: "",
     gambar_url: "",
   });
@@ -36,7 +36,7 @@ export default function AdminPrestasiPage() {
 
   const fetchData = async () => {
     const { data, error } = await supabase
-      .from("prestasi")
+      .from("ekstrakurikuler")
       .select("*")
       .order("created_at", { ascending: false });
 
@@ -58,20 +58,20 @@ export default function AdminPrestasiPage() {
   const uploadImage = async (file: File) => {
     const filename = `${uuidv4()}-${file.name.replace(/\s+/g, "-")}`;
     const { error } = await supabase.storage
-      .from("prestasi-images")
+      .from("ekstrakurikuler-images")
       .upload(filename, file);
 
     if (error) throw error;
 
     const { data } = supabase.storage
-      .from("prestasi-images")
+      .from("ekstrakurikuler-images")
       .getPublicUrl(filename);
 
     return data.publicUrl;
   };
 
   const handleSubmit = async () => {
-    if (!formData.judul || !formData.deskripsi) return;
+    if (!formData.nama || !formData.deskripsi) return;
 
     let imageUrl = formData.gambar_url;
 
@@ -85,7 +85,7 @@ export default function AdminPrestasiPage() {
     }
 
     const payload = {
-      judul: formData.judul,
+      nama: formData.nama,
       deskripsi: formData.deskripsi,
       gambar_url: imageUrl,
     };
@@ -94,18 +94,20 @@ export default function AdminPrestasiPage() {
 
     if (editingId) {
       const { error: updateError } = await supabase
-        .from("prestasi")
+        .from("ekstrakurikuler")
         .update(payload)
         .eq("id", editingId);
       error = updateError;
     } else {
-      const { error: insertError } = await supabase.from("prestasi").insert([
-        {
-          ...payload,
-          id: uuidv4(),
-          created_at: new Date().toISOString(),
-        },
-      ]);
+      const { error: insertError } = await supabase
+        .from("ekstrakurikuler")
+        .insert([
+          {
+            ...payload,
+            id: uuidv4(),
+            created_at: new Date().toISOString(),
+          },
+        ]);
       error = insertError;
     }
 
@@ -117,21 +119,21 @@ export default function AdminPrestasiPage() {
     }
   };
 
-  const handleEdit = (item: Prestasi) => {
+  const handleEdit = (item: Ekstra) => {
     setFormData(item);
     setEditingId(item.id);
     setFormVisible(true);
   };
 
   const handleDelete = async (id: string) => {
-    await supabase.from("prestasi").delete().eq("id", id);
+    await supabase.from("ekstrakurikuler").delete().eq("id", id);
     fetchData();
   };
 
   const resetForm = () => {
     setFormData({
       id: "",
-      judul: "",
+      nama: "",
       deskripsi: "",
       gambar_url: "",
     });
@@ -143,7 +145,9 @@ export default function AdminPrestasiPage() {
   return (
     <section className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-green-900">Kelola Prestasi</h2>
+        <h2 className="text-2xl font-bold text-green-900">
+          Kelola Ekstrakurikuler
+        </h2>
         <button
           onClick={() => {
             resetForm();
@@ -151,7 +155,7 @@ export default function AdminPrestasiPage() {
           }}
           className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 flex items-center gap-2"
         >
-          <FaPlus /> Tambah Prestasi
+          <FaPlus /> Tambah Ekstrakulikuler
         </button>
       </div>
 
@@ -159,9 +163,9 @@ export default function AdminPrestasiPage() {
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <input
             type="text"
-            name="judul"
-            placeholder="Judul Prestasi"
-            value={formData.judul}
+            name="nama"
+            placeholder="Nama Ekstrakulikuler"
+            value={formData.nama}
             onChange={handleChange}
             className="w-full p-2 border mb-4 rounded"
           />
@@ -193,7 +197,7 @@ export default function AdminPrestasiPage() {
           <thead className="bg-gray-100 text-gray-600 text-xs uppercase">
             <tr>
               <th className="px-6 py-4">Gambar</th>
-              <th className="px-6 py-4">Judul</th>
+              <th className="px-6 py-4">Nama</th>
               <th className="px-6 py-4">Deskripsi</th>
               <th className="px-6 py-4 text-center">Aksi</th>
             </tr>
@@ -215,7 +219,7 @@ export default function AdminPrestasiPage() {
                   )}
                 </td>
                 <td className="px-6 py-3 font-medium text-gray-900">
-                  {item.judul}
+                  {item.nama}
                 </td>
                 <td className="px-6 py-3 max-w-sm">{item.deskripsi}</td>
                 <td className="px-6 py-3 text-center">

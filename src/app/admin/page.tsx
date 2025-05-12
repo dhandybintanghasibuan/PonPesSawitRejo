@@ -125,8 +125,7 @@ export default function AdminDashboardPage() {
               <th className="px-6 py-3 text-left font-medium">Gambar</th>
               <th className="px-6 py-3 text-left font-medium">Nama Program</th>
               <th className="px-6 py-3 text-left font-medium">Status</th>
-              <th className="px-6 py-3 text-left font-medium">Peserta</th>
-              <th className="px-6 py-3 text-right font-medium">Aksi</th>
+              <th className="px-6 py-3 text-left font-medium">Aksi</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">

@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { supabase } from "@/utils/supabase";
 import { useRouter } from "next/navigation";
-import { FaLock } from "react-icons/fa";
 import Image from "next/image";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -30,7 +31,10 @@ export default function AdminLoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e0f2fe] to-[#f0fdf4] px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 animate-fade-in">
+      <form
+        onSubmit={handleLogin}
+        className="w-full max-w-md rounded-2xl shadow-2xl p-8 border border-gray-100 bg-white animate-fade-in"
+      >
         {/* Logo + Heading */}
         <div className="text-center mb-6">
           <Image
@@ -48,39 +52,47 @@ export default function AdminLoginPage() {
           </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleLogin} className="space-y-5">
-          <div>
+        {/* Input & Button */}
+        <div className="space-y-5">
+          {/* Email */}
+          <input
+            type="email"
+            placeholder="Alamat Email"
+            required
+            className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d4f9e] transition"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          {/* Password + Toggle */}
+          <div className="relative">
             <input
-              type="email"
-              placeholder="Alamat Email"
-              required
-              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d4f9e] transition"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div>
-            <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Kata Sandi"
               required
-              className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d4f9e] transition"
+              className="w-full border border-gray-300 px-4 py-2 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0d4f9e] transition"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-[#0d4f9e]"
+              aria-label="Toggle password visibility"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
           {error && <p className="text-sm text-red-600 text-center">{error}</p>}
-
           <button
             type="submit"
             className="w-full bg-[#0d4f9e] hover:bg-blue-900 text-white font-semibold py-2 rounded-md transition shadow"
           >
             Masuk
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </main>
   );
 }

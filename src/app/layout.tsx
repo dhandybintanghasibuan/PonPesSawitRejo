@@ -1,25 +1,22 @@
-import "./globals.css"; // Tailwind CSS
-import "../styles/style.css"; // CSS kustom
-import "@fortawesome/fontawesome-free/css/all.min.css"; // Font Awesome
+// src/app/layout.tsx
+import "./globals.css";
+import "../styles/style.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import type { Metadata } from "next";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { ReactNode } from "react";
+import ClientLayout from "src/app/ClientLayout";
 
 export const metadata: Metadata = {
   title: "Pondok Pesantren Sawit Rejo",
   description:
     "Website resmi Pondok Pesantren Sawit Rejo - Kutalimbaru, Deli Serdang",
   icons: {
-    icon: "/favicon.png", // pastikan file ini ada di folder public
+    icon: "/favicon.png",
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="id">
       <head>
@@ -30,8 +27,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" type="image/png" />
       </head>
       <body className="text-gray-800 bg-[#f8f5ee]">
-        <Navbar />
-        <main>{children}</main>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
