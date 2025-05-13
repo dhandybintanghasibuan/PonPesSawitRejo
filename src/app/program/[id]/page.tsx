@@ -1,24 +1,25 @@
-// src/app/program/[id]/page.tsx
-
+// app/program/[id]/page.tsx
+import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
 
-type Props = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+type PageProps = {
+  params: {
+    id: string;
+  };
 };
 
-export default async function ProgramDetailPage(props: Props) {
-  const { id } = props.params;
-
-  const supabase = createClient();
+export default async function ProgramDetailPage({ params }: PageProps) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const { data: program, error } = await supabase
     .from("program")
     .select("*")
-    .eq("id", id)
+    .eq("id", params.id)
     .single();
 
   if (error || !program) {
@@ -34,29 +35,22 @@ export default async function ProgramDetailPage(props: Props) {
             className="text-sm text-blue-700 hover:underline inline-flex items-center gap-1"
           >
             <i className="fas fa-arrow-left text-xs" />
-            Kembali
+            Kembali ke Program
           </Link>
         </div>
-
-        <div className="rounded-xl overflow-hidden shadow-md mb-10">
+        <h1 className="text-3xl font-bold mb-4">{program.nama}</h1>
+        {program.gambar_url && (
           <Image
-            src={program.image_url || "/assets/img/default.jpg"}
+            src={program.gambar_url}
             alt={program.nama}
-            width={1200}
-            height={600}
-            className="w-full h-80 object-cover"
+            width={800}
+            height={400}
+            className="rounded-lg mb-6"
           />
-        </div>
-
-        <div className="text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-green-900 mb-4">
-            {program.nama}
-          </h1>
-          <div className="w-24 h-1 bg-[#0d4f9e] mx-auto mb-6 rounded" />
-          <p className="text-gray-700 leading-relaxed text-lg max-w-3xl mx-auto">
-            {program.deskripsi}
-          </p>
-        </div>
+        )}
+        <p className="text-lg text-gray-700 whitespace-pre-line">
+          {program.deskripsi}
+        </p>
       </div>
     </section>
   );
