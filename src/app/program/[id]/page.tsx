@@ -1,19 +1,19 @@
-import React from "react"; // ✅ WAJIB untuk JSX typing
+import React from "react";
 import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
+type Props = {
+  params: { id: string };
+};
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export default async function ProgramDetailPage({
-  params,
-}: {
-  params: { id: string };
-}): Promise<React.ReactElement> {
+export default async function ProgramDetailPage({ params }: Props) {
   const { data: program, error } = await supabase
     .from("program")
     .select("*")
