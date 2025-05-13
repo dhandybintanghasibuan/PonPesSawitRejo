@@ -5,14 +5,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
-// Definisi tipe params yang benar
-interface PageParams {
-  params: {
-    id: string;
-  };
-}
-
-export default async function ProgramDetailPage({ params }: PageParams) {
+// Fix the type definition according to the error message
+export default async function ProgramDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const supabase = createClient();
 
   const { data: program, error } = await supabase
