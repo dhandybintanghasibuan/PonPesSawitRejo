@@ -1,12 +1,18 @@
+// src/app/program/[id]/page.tsx
+
 import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+type Params = {
+  id: string;
+};
+
 export default async function ProgramDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Params;
 }) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
