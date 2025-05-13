@@ -1,23 +1,19 @@
 // src/app/program/[id]/page.tsx
 
-import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
 
-type Params = {
-  id: string;
-};
+// Definisi tipe params yang benar
+interface PageParams {
+  params: {
+    id: string;
+  };
+}
 
-export default async function ProgramDetailPage({
-  params,
-}: {
-  params: Params;
-}) {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+export default async function ProgramDetailPage({ params }: PageParams) {
+  const supabase = createClient();
 
   const { data: program, error } = await supabase
     .from("program")
