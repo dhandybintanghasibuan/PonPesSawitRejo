@@ -8,11 +8,13 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-export default async function ProgramDetailPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function ProgramDetailPage({ params }: PageProps) {
   const { data: program, error } = await supabase
     .from("program")
     .select("*")
