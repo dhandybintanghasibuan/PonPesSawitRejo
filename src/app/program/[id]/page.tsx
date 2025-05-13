@@ -1,3 +1,4 @@
+// src/app/program/[id]/page.tsx
 import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +10,7 @@ type Props = {
   };
 };
 
-const Page = async ({ params }: Props) => {
+export default async function ProgramDetailPage({ params }: Props) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -26,8 +27,9 @@ const Page = async ({ params }: Props) => {
   }
 
   return (
-    <section className="py-20 bg-gray-50 min-h-screen islamic-border">
+    <section className="min-h-screen py-20 bg-gray-50 islamic-border">
       <div className="container mx-auto px-4">
+        {/* Tombol Kembali */}
         <div className="mb-6">
           <Link
             href="/#program"
@@ -37,20 +39,29 @@ const Page = async ({ params }: Props) => {
           </Link>
         </div>
 
-        <h1 className="text-3xl font-bold mb-4">{program.nama}</h1>
-        {program.gambar_url && (
-          <Image
-            src={program.gambar_url}
-            alt={program.nama}
-            width={800}
-            height={450}
-            className="rounded-lg mb-6"
-          />
-        )}
-        <p className="text-lg leading-relaxed">{program.deskripsi}</p>
+        {/* Judul Program */}
+        <h1 className="text-3xl md:text-4xl font-bold text-green-900 mb-6">
+          {program.nama}
+        </h1>
+
+        {/* Gambar Program */}
+        {program.gambar_url && program.gambar_url.startsWith("http") ? (
+          <div className="mb-8">
+            <Image
+              src={program.gambar_url}
+              alt={program.nama}
+              width={1000}
+              height={500}
+              className="rounded-lg w-full h-auto object-cover"
+            />
+          </div>
+        ) : null}
+
+        {/* Deskripsi Program */}
+        <div className="prose max-w-none text-gray-800 text-lg leading-relaxed">
+          {program.deskripsi}
+        </div>
       </div>
     </section>
   );
-};
-
-export default Page;
+}
