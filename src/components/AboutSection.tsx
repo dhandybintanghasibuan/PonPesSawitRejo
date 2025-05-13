@@ -43,7 +43,7 @@ export default function AboutSection() {
               zaman.
             </p>
             <p className="text-gray-700 mb-6 leading-relaxed text-justify">
-              Dengan mengintegrasikan kurikulum salaf dan modern, santri tidak
+              Dengan mengintegrasikan kurikulum pesantren dan modern, santri tidak
               hanya dibekali ilmu agama, tetapi juga ilmu pengetahuan umum,
               teknologi, dan keterampilan hidup (life skill) untuk menjadi
               pribadi yang bermanfaat bagi umat.
