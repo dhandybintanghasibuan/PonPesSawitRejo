@@ -3,18 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// ✅ Pastikan gunakan Server Action style (async + export default)
+export default async function ProgramDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
-type PageProps = {
-  params: {
-    id: string;
-  };
-};
-
-export default async function ProgramDetailPage({ params }: PageProps) {
   const { data: program, error } = await supabase
     .from("program")
     .select("*")
