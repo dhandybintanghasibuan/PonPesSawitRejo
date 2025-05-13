@@ -4,13 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-type Props = {
-  params: {
-    id: string;
-  };
+type PageProps = {
+  params: { id: string };
 };
 
-export default async function ProgramDetailPage({ params }: Props) {
+export default async function Page({ params }: PageProps) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -29,23 +27,20 @@ export default async function ProgramDetailPage({ params }: Props) {
   return (
     <section className="min-h-screen py-20 bg-gray-50 islamic-border">
       <div className="container mx-auto px-4">
-        {/* Tombol Kembali */}
         <div className="mb-6">
           <Link
             href="/#program"
             className="text-sm text-blue-700 hover:underline inline-flex items-center gap-1"
           >
-            <i className="fas fa-arrow-left text-xs" /> Kembali
+            <i className="fas fa-arrow-left text-xs" /> Kembali ke Program
           </Link>
         </div>
 
-        {/* Judul Program */}
         <h1 className="text-3xl md:text-4xl font-bold text-green-900 mb-6">
           {program.nama}
         </h1>
 
-        {/* Gambar Program */}
-        {program.gambar_url && program.gambar_url.startsWith("http") ? (
+        {program.gambar_url?.startsWith("http") && (
           <div className="mb-8">
             <Image
               src={program.gambar_url}
@@ -55,10 +50,9 @@ export default async function ProgramDetailPage({ params }: Props) {
               className="rounded-lg w-full h-auto object-cover"
             />
           </div>
-        ) : null}
+        )}
 
-        {/* Deskripsi Program */}
-        <div className="prose max-w-none text-gray-800 text-lg leading-relaxed">
+        <div className="prose max-w-none text-gray-800 text-lg leading-relaxed whitespace-pre-line">
           {program.deskripsi}
         </div>
       </div>
