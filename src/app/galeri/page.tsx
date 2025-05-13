@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@supabase/supabase-js";
+import { FaArrowLeft } from "react-icons/fa"; // Ikon React
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -16,54 +17,48 @@ type GaleriItem = {
   image_url: string;
 };
 
-export default function GallerySection() {
+export default function GaleriPage() {
   const [items, setItems] = useState<GaleriItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchGaleri = async () => {
+      const { data, error } = await supabase
+        .from("galeri")
+        .select("id, title, image_url")
+        .order("created_at", { ascending: false });
+
+      if (!error && data) setItems(data);
+      setLoading(false);
+    };
+
     fetchGaleri();
   }, []);
 
-  const fetchGaleri = async () => {
-    const { data, error } = await supabase
-      .from("galeri")
-      .select("id, title, image_url")
-      .order("created_at", { ascending: false });
-
-    if (!error && data) setItems(data);
-    setLoading(false);
-  };
-
-  // Ambil hanya 8 item pertama untuk ditampilkan
-  const displayedItems = items.slice(0, 8);
-
   return (
-    <section
-      id="galeri"
-      className="min-h-screen py-20 bg-white islamic-border flex items-center"
-    >
+    <section className="min-h-screen py-20 bg-gray-50 islamic-border">
       <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-green-900 mb-2">
-            Galeri Kegiatan
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Momen-momen dalam kehidupan santri di Pondok Pesantren Sawit Rejo
-          </p>
-          <div className="w-24 h-1 bg-[#0d4f9e] mx-auto mt-4" />
+        {/* Tombol Kembali */}
+        <div className="mb-6">
+          <Link
+            href="/#galeri"
+            className="inline-flex items-center text-sm text-blue-700 hover:underline"
+          >
+            <FaArrowLeft className="mr-2" /> Kembali
+          </Link>
         </div>
 
-        {/* Galeri Grid */}
+        <h1 className="text-3xl md:text-4xl font-bold text-center text-green-900 mb-8">
+          Semua Galeri Kegiatan
+        </h1>
+
         {loading ? (
           <p className="text-center text-gray-500">Memuat galeri...</p>
-        ) : displayedItems.length === 0 ? (
-          <p className="text-center text-gray-500">
-            Belum ada galeri tersedia.
-          </p>
+        ) : items.length === 0 ? (
+          <p className="text-center text-gray-500">Belum ada galeri tersedia.</p>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {displayedItems.map((item) => (
+            {items.map((item) => (
               <div
                 key={item.id}
                 className="group relative rounded-lg overflow-hidden shadow-sm border border-[#0d4f9e]/20 hover:shadow-md transition duration-300"
@@ -83,18 +78,6 @@ export default function GallerySection() {
                 </div>
               </div>
             ))}
-          </div>
-        )}
-
-        {/* Button */}
-        {items.length > 8 && (
-          <div className="text-center mt-10">
-            <Link
-              href="/galeri"
-              className="inline-block bg-[#0d4f9e] hover:bg-[#093e7a] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300"
-            >
-              Lihat Lebih Banyak <i className="fas fa-arrow-right ml-2"></i>
-            </Link>
           </div>
         )}
       </div>
