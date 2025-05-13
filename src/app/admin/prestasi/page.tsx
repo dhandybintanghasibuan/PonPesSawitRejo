@@ -12,7 +12,7 @@ const supabase = createClient(
 
 type Prestasi = {
   id: string;
-  nama: string;
+  judul: string;
   deskripsi: string;
   gambar_url?: string;
   created_at?: string;
@@ -25,7 +25,7 @@ export default function AdminPrestasiPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState<Prestasi>({
     id: "",
-    nama: "",
+    judul: "",
     deskripsi: "",
     gambar_url: "",
   });
@@ -71,7 +71,7 @@ export default function AdminPrestasiPage() {
   };
 
   const handleSubmit = async () => {
-    if (!formData.nama || !formData.deskripsi) return;
+    if (!formData.judul || !formData.deskripsi) return;
 
     let imageUrl = formData.gambar_url;
 
@@ -85,7 +85,7 @@ export default function AdminPrestasiPage() {
     }
 
     const payload = {
-      nama: formData.nama,
+      judul: formData.judul,
       deskripsi: formData.deskripsi,
       gambar_url: imageUrl,
     };
@@ -133,7 +133,7 @@ export default function AdminPrestasiPage() {
   const resetForm = () => {
     setFormData({
       id: "",
-      nama: "",
+      judul: "",
       deskripsi: "",
       gambar_url: "",
     });
@@ -161,9 +161,9 @@ export default function AdminPrestasiPage() {
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <input
             type="text"
-            name="nama"
-            placeholder="Nama Prestasi"
-            value={formData.nama}
+            name="judul"
+            placeholder="Judul Prestasi"
+            value={formData.judul}
             onChange={handleChange}
             className="w-full p-2 border mb-4 rounded"
           />
@@ -195,7 +195,7 @@ export default function AdminPrestasiPage() {
           <thead className="bg-gray-100 text-gray-600 text-xs uppercase">
             <tr>
               <th className="px-6 py-4">Gambar</th>
-              <th className="px-6 py-4">Nama</th>
+              <th className="px-6 py-4">Judul</th>
               <th className="px-6 py-4">Deskripsi</th>
               <th className="px-6 py-4 text-center">Aksi</th>
             </tr>
@@ -217,7 +217,7 @@ export default function AdminPrestasiPage() {
                   )}
                 </td>
                 <td className="px-6 py-3 font-medium text-gray-900">
-                  {item.nama}
+                  {item.judul}
                 </td>
                 <td className="px-6 py-3 max-w-sm">{item.deskripsi}</td>
                 <td className="px-6 py-3 text-center">
