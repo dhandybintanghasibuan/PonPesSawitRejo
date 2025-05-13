@@ -1,16 +1,15 @@
-// app/program/[id]/page.tsx
 import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-type PageProps = {
+type Props = {
   params: {
     id: string;
   };
 };
 
-export default async function ProgramDetailPage({ params }: PageProps) {
+export default async function Page({ params }: Props) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -34,23 +33,21 @@ export default async function ProgramDetailPage({ params }: PageProps) {
             href="/#program"
             className="text-sm text-blue-700 hover:underline inline-flex items-center gap-1"
           >
-            <i className="fas fa-arrow-left text-xs" />
-            Kembali ke Program
+            <i className="fas fa-arrow-left text-xs" /> Kembali
           </Link>
         </div>
+
         <h1 className="text-3xl font-bold mb-4">{program.nama}</h1>
         {program.gambar_url && (
           <Image
             src={program.gambar_url}
             alt={program.nama}
             width={800}
-            height={400}
+            height={450}
             className="rounded-lg mb-6"
           />
         )}
-        <p className="text-lg text-gray-700 whitespace-pre-line">
-          {program.deskripsi}
-        </p>
+        <p className="text-lg leading-relaxed">{program.deskripsi}</p>
       </div>
     </section>
   );
