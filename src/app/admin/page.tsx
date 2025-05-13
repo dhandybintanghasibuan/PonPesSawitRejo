@@ -117,47 +117,39 @@ export default function AdminDashboardPage() {
         ))}
       </div>
 
-      {/* Tabel Program */}
-      <div className="bg-white rounded-xl shadow-md overflow-auto">
-        <table className="min-w-[1000px] w-full divide-y divide-gray-200 text-sm">
-          <thead className="bg-gray-50 text-gray-600">
-            <tr>
-              <th className="px-6 py-3 text-left font-medium">Gambar</th>
-              <th className="px-6 py-3 text-left font-medium">Nama Program</th>
-              <th className="px-6 py-3 text-left font-medium">Status</th>
-              <th className="px-6 py-3 text-left font-medium">Aksi</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {loading ? (
+      {/* Tabel */}
+      <div className="bg-white rounded-xl shadow-md overflow-hidden">
+        {loading ? (
+          <p className="p-6 text-gray-500 text-center">Memuat data...</p>
+        ) : (
+          <table className="min-w-full divide-y divide-gray-200 text-sm">
+            <thead className="bg-gray-50 text-gray-600">
               <tr>
-                <td colSpan={5} className="text-center px-6 py-4 text-gray-500">
-                  Memuat data...
-                </td>
+                <th className="px-6 py-3 text-left font-medium">Gambar</th>
+                <th className="px-6 py-3 text-left font-medium">
+                  Nama Program
+                </th>
+                <th className="px-6 py-3 text-left font-medium">Status</th>
+                <th className="px-6 py-3 text-right font-medium">Aksi</th>
               </tr>
-            ) : filtered.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="text-center px-6 py-4 text-gray-500">
-                  Tidak ada program ditemukan.
-                </td>
-              </tr>
-            ) : (
-              filtered.map((item) => (
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {filtered.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
-                    {item.gambar_url ? (
+                    {item.image_url ? (
                       <img
-                        src={item.gambar_url}
+                        src={item.image_url}
                         alt={item.nama}
                         className="w-14 h-14 object-cover rounded-lg"
                       />
                     ) : (
-                      <div className="w-14 h-14 bg-gray-200 flex items-center justify-center rounded-lg text-gray-500">
+                      <div className="w-14 h-14 flex items-center justify-center bg-gray-200 rounded-lg text-gray-500">
                         <FaImage />
                       </div>
                     )}
                   </td>
-                  <td className="px-6 py-4 font-semibold text-gray-800">
+                  <td className="px-6 py-4 font-medium text-gray-800">
                     {item.nama}
                   </td>
                   <td className="px-6 py-4">
@@ -171,7 +163,6 @@ export default function AdminDashboardPage() {
                       {item.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4">{item.peserta || 0}</td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-2">
                       <Link
@@ -189,10 +180,10 @@ export default function AdminDashboardPage() {
                     </div>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {/* Kontak Masuk Terbaru */}
