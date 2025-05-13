@@ -3,18 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-type Props = {
+interface PageProps {
   params: {
     id: string;
   };
-};
+}
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+export default async function ProgramDetailPage({ params }: PageProps) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
-export default async function ProgramDetailPage({ params }: Props) {
   const { data: program, error } = await supabase
     .from("program")
     .select("*")
@@ -28,7 +28,6 @@ export default async function ProgramDetailPage({ params }: Props) {
   return (
     <section className="py-20 bg-gray-50 min-h-screen islamic-border">
       <div className="container mx-auto px-4">
-        {/* Tombol Kembali */}
         <div className="mb-6">
           <Link
             href="/#program"
@@ -39,7 +38,6 @@ export default async function ProgramDetailPage({ params }: Props) {
           </Link>
         </div>
 
-        {/* Gambar Program */}
         <div className="rounded-xl overflow-hidden shadow-md mb-10">
           <Image
             src={program.image_url || "/assets/img/default.jpg"}
@@ -50,7 +48,6 @@ export default async function ProgramDetailPage({ params }: Props) {
           />
         </div>
 
-        {/* Detail Program */}
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-green-900 mb-4">
             {program.nama}
