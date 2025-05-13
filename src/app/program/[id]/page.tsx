@@ -5,18 +5,20 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
-// Fix the type definition according to the error message
-export default async function ProgramDetailPage({
-  params,
-}: {
+type Props = {
   params: { id: string };
-}) {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default async function ProgramDetailPage(props: Props) {
+  const { id } = props.params;
+
   const supabase = createClient();
 
   const { data: program, error } = await supabase
     .from("program")
     .select("*")
-    .eq("id", params.id)
+    .eq("id", id)
     .single();
 
   if (error || !program) {
