@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabase";
 import Image from "next/image";
+import { supabase } from "@/utils/supabase";
 
 type Ekstrakurikuler = {
   id: string;
@@ -16,7 +16,7 @@ export default function EkstrakurikulerPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       const { data, error } = await supabase
         .from("ekstrakurikuler")
         .select("*")
@@ -24,7 +24,7 @@ export default function EkstrakurikulerPage() {
 
       if (!error && data) setItems(data);
       setLoading(false);
-    }
+    };
 
     fetchData();
   }, []);
@@ -84,4 +84,3 @@ export default function EkstrakurikulerPage() {
     </section>
   );
 }
-    
