@@ -4,6 +4,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import { FaClock, FaUserGraduate } from "react-icons/fa";
 import { SiQuora } from "react-icons/si";
 import Image from "next/image";
+import { useRef, useState, useEffect } from "react";
 import AboutSection from "../components/AboutSection";
 import NewsSection from "../components/NewsSection";
 import ProgramSection from "../components/ProgramSection";
@@ -15,6 +16,24 @@ import MapSection from "../components/MapSection";
 import Footer from "../components/Footer";
 
 export default function Home() {
+  const footerRef = useRef<HTMLElement | null>(null);
+  const [showTopBtn, setShowTopBtn] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowTopBtn(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (footerRef.current) observer.observe(footerRef.current);
+
+    return () => {
+      if (footerRef.current) observer.unobserve(footerRef.current);
+    };
+  }, []);
+
   return (
     <main className="text-gray-800 scroll-smooth">
       {/* Hero Section */}
@@ -91,31 +110,9 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20 animate-bounce hidden md:block">
-          <a
-            href="#program"
-            className="text-amber-800 hover:text-amber-700 transition-colors"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
-          </a>
-        </div>
       </section>
 
-      {/* === Section lainnya dengan tinggi konsisten === */}
+      {/* Section lainnya */}
       <section id="about" className="min-h-screen">
         <AboutSection />
       </section>
@@ -137,14 +134,25 @@ export default function Home() {
       <section id="kontak" className="min-h-screen">
         <ContactSection />
       </section>
-
-      {/* MapSection tetap tidak diatur min-h-screen */}
       <section id="map">
         <MapSection />
       </section>
 
-      {/* Footer tunggal */}
-      <Footer />
+      {/* Footer dengan ref */}
+      <footer ref={footerRef}>
+        <Footer />
+      </footer>
+
+      {/* Tombol Kembali ke Atas */}
+      {showTopBtn && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[#0d4f9e] text-white text-lg shadow-lg hover:bg-[#093d78] transition duration-300 flex items-center justify-center"
+          aria-label="Kembali ke atas"
+        >
+          <i className="fas fa-arrow-up"></i>
+        </button>
+      )}
     </main>
   );
 }

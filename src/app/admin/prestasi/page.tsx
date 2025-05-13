@@ -10,7 +10,7 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-type Ekstra = {
+type Prestasi = {
   id: string;
   nama: string;
   deskripsi: string;
@@ -18,12 +18,12 @@ type Ekstra = {
   created_at?: string;
 };
 
-export default function AdminEkstrakurikulerPage() {
-  const [data, setData] = useState<Ekstra[]>([]);
+export default function AdminPrestasiPage() {
+  const [data, setData] = useState<Prestasi[]>([]);
   const [formVisible, setFormVisible] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [formData, setFormData] = useState<Ekstra>({
+  const [formData, setFormData] = useState<Prestasi>({
     id: "",
     nama: "",
     deskripsi: "",
@@ -36,7 +36,7 @@ export default function AdminEkstrakurikulerPage() {
 
   const fetchData = async () => {
     const { data, error } = await supabase
-      .from("ekstrakurikuler")
+      .from("prestasi")
       .select("*")
       .order("created_at", { ascending: false });
 
@@ -58,13 +58,13 @@ export default function AdminEkstrakurikulerPage() {
   const uploadImage = async (file: File) => {
     const filename = `${uuidv4()}-${file.name.replace(/\s+/g, "-")}`;
     const { error } = await supabase.storage
-      .from("ekstrakurikuler-images")
+      .from("prestasi-images")
       .upload(filename, file);
 
     if (error) throw error;
 
     const { data } = supabase.storage
-      .from("ekstrakurikuler-images")
+      .from("prestasi-images")
       .getPublicUrl(filename);
 
     return data.publicUrl;
@@ -94,20 +94,18 @@ export default function AdminEkstrakurikulerPage() {
 
     if (editingId) {
       const { error: updateError } = await supabase
-        .from("ekstrakurikuler")
+        .from("prestasi")
         .update(payload)
         .eq("id", editingId);
       error = updateError;
     } else {
-      const { error: insertError } = await supabase
-        .from("ekstrakurikuler")
-        .insert([
-          {
-            ...payload,
-            id: uuidv4(),
-            created_at: new Date().toISOString(),
-          },
-        ]);
+      const { error: insertError } = await supabase.from("prestasi").insert([
+        {
+          ...payload,
+          id: uuidv4(),
+          created_at: new Date().toISOString(),
+        },
+      ]);
       error = insertError;
     }
 
@@ -119,14 +117,16 @@ export default function AdminEkstrakurikulerPage() {
     }
   };
 
-  const handleEdit = (item: Ekstra) => {
+  const handleEdit = (item: Prestasi) => {
     setFormData(item);
     setEditingId(item.id);
     setFormVisible(true);
   };
 
   const handleDelete = async (id: string) => {
-    await supabase.from("ekstrakurikuler").delete().eq("id", id);
+    const confirm = window.confirm("Yakin ingin menghapus data?");
+    if (!confirm) return;
+    await supabase.from("prestasi").delete().eq("id", id);
     fetchData();
   };
 
@@ -145,9 +145,7 @@ export default function AdminEkstrakurikulerPage() {
   return (
     <section className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-green-900">
-          Kelola Ekstrakurikuler
-        </h2>
+        <h2 className="text-2xl font-bold text-green-900">Kelola Prestasi</h2>
         <button
           onClick={() => {
             resetForm();
@@ -155,7 +153,7 @@ export default function AdminEkstrakurikulerPage() {
           }}
           className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 flex items-center gap-2"
         >
-          <FaPlus /> Tambah Ekstrakulikuler
+          <FaPlus /> Tambah Prestasi
         </button>
       </div>
 
@@ -164,7 +162,7 @@ export default function AdminEkstrakurikulerPage() {
           <input
             type="text"
             name="nama"
-            placeholder="Nama Ekstrakulikuler"
+            placeholder="Nama Prestasi"
             value={formData.nama}
             onChange={handleChange}
             className="w-full p-2 border mb-4 rounded"
