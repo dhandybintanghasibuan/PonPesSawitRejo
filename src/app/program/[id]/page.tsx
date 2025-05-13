@@ -9,7 +9,9 @@ type Props = {
   };
 };
 
-export default async function Page({ params }: Props) {
+export default async function ProgramDetailPage({
+  params,
+}: Props): Promise<JSX.Element> {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -61,9 +63,3 @@ export default async function Page({ params }: Props) {
     </section>
   );
 }
-
-
-// src/app/page.tsx
-// Tambah komentar kosong
-
-// Trigger
