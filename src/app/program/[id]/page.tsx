@@ -2,24 +2,14 @@ import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
 
-// ✅ Pastikan definisi type langsung sesuai App Router
-interface PageProps {
+type Props = {
   params: {
     id: string;
   };
-}
+};
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  return {
-    title: `Program Detail - ${params.id}`,
-  };
-}
-
-export default async function Page({ params }: PageProps) {
+export default async function Page({ params }: Props) {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
