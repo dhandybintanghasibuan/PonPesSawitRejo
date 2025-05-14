@@ -26,7 +26,7 @@ export default function Footer() {
                 <i className="fab fa-facebook-f"></i>
               </a>
               <a
-                href="https://www.instagram.com/generus.bangsa?igsh=MTA2bDllNGprNWY2eQ=="
+                href="https://www.instagram.com/pp.sawitrejo/profilecard/?igsh=bmxxNG1icXlwNmFw"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-amber-400"
@@ -40,6 +40,14 @@ export default function Footer() {
                 className="hover:text-amber-400"
               >
                 <i className="fab fa-youtube"></i>
+              </a>
+              <a
+                href="https://www.tiktok.com/@pp.sawitrejo?_t=ZS-8wKvwBiH34h&_r=1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-amber-400"
+              >
+                <i className="fab fa-tiktok"></i>
               </a>
             </div>
           </div>

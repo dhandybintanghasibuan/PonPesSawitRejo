@@ -1,9 +1,6 @@
 "use client";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { FaClock, FaUserGraduate } from "react-icons/fa";
-import { SiQuora } from "react-icons/si";
-import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import AboutSection from "../components/AboutSection";
 import NewsSection from "../components/NewsSection";
@@ -15,20 +12,32 @@ import ContactSection from "../components/ContactSection";
 import MapSection from "../components/MapSection";
 import Footer from "../components/Footer";
 
+const bgImages = [
+  "/assets/img/header1bg.jpg",
+  "/assets/img/header2bg.jpg",
+  "/assets/img/header3bg.jpg",
+  "/assets/img/header4bg.jpg",
+  "/assets/img/header5bg.jpg",
+];
+
 export default function Home() {
   const footerRef = useRef<HTMLElement | null>(null);
   const [showTopBtn, setShowTopBtn] = useState(false);
+  const [bgIndex, setBgIndex] = useState(0);  
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBgIndex((prevIndex) => (prevIndex + 1) % bgImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShowTopBtn(entry.isIntersecting);
-      },
+      ([entry]) => setShowTopBtn(entry.isIntersecting),
       { threshold: 0.1 }
     );
-
     if (footerRef.current) observer.observe(footerRef.current);
-
     return () => {
       if (footerRef.current) observer.unobserve(footerRef.current);
     };
@@ -39,16 +48,12 @@ export default function Home() {
       {/* Hero Section */}
       <section
         id="home"
-        className="relative w-full h-screen min-h-[600px] text-green-900"
+        className="relative w-full h-screen min-h-[600px] text-green-900 transition-all duration-1000"
       >
-        <div className="absolute inset-0 -z-10">
-          <Image
-            src="/assets/img/header1bg.jpg"
-            alt="Santri"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+        <div
+          className="absolute inset-0 -z-10 bg-cover bg-center transition-all duration-1000"
+          style={{ backgroundImage: `url(${bgImages[bgIndex]})` }}
+        >
           <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent backdrop-blur-sm" />
         </div>
 
@@ -67,13 +72,15 @@ export default function Home() {
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">
               Membentuk Generasi{" "}
               <span className="text-amber-700">Qur&apos;ani</span>{" "}
-              <span className="relative">Berakhlak Mulia</span>
+              <span className="relative">
+                Berakhlak Mulia dan Berprestasi Unggul
+              </span>
             </h2>
             <p className="text-lg text-gray-800 mb-8 leading-relaxed">
               Pondok Pesantren Sawit Rejo menyelenggarakan pendidikan Islam
-              terpadu yang mengintegrasikan ilmu agama dan umum dengan penekanan
-              pada pembentukan akhlak mulia dan kepribadian yang berlandaskan
-              Al-Qur&apos;an.
+              terpadu yang mengintegrasikan ilmu agama dan umum dengan
+              penekanan pada pembentukan akhlak mulia dan kepribadian yang
+              berlandaskan Al-Qur&apos;an.
             </p>
             <div className="flex flex-wrap gap-4">
               <a
@@ -98,10 +105,10 @@ export default function Home() {
             <div className="flex gap-5">
               <StatBox
                 icon="hourglass-half"
-                value="10+"
+                value="14+"
                 label="Tahun Mengabdi"
               />
-              <StatBox icon="users" value="70+" label="Santri Aktif" />
+              <StatBox icon="users" value="200+" label="Santri Aktif" />
               <StatBox
                 icon="book-quran"
                 value="100%"
