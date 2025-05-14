@@ -20,7 +20,6 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>("home");
   const pathname = usePathname();
 
-  // Scroll spy hanya untuk halaman utama
   useEffect(() => {
     if (pathname === "/") {
       const handleScroll = () => {
@@ -48,9 +47,8 @@ export default function Navbar() {
   }, [pathname]);
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50 navbar-animate">
+    <header className="bg-green-900 shadow-md sticky top-0 z-50 navbar-animate">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo & Judul bisa diklik ke Beranda */}
         <Link
           href="/#home"
           scroll={true}
@@ -64,10 +62,10 @@ export default function Navbar() {
             className="h-12 w-auto"
           />
           <div className="leading-tight">
-            <h1 className="text-lg sm:text-xl font-bold text-green-800">
+            <h1 className="text-lg sm:text-xl font-bold text-white">
               Pondok Pesantren Sawit Rejo
             </h1>
-            <p className="text-xs sm:text-sm text-amber-800 font-semibold">
+            <p className="text-xs sm:text-sm text-amber-200 font-semibold">
               Kutalimbaru - Deli Serdang
             </p>
           </div>
@@ -76,20 +74,20 @@ export default function Navbar() {
         {/* Hamburger */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-amber-800 text-2xl focus:outline-none"
+          className="md:hidden text-white text-2xl focus:outline-none"
         >
           <i className="fas fa-bars"></i>
         </button>
 
         {/* Menu Desktop */}
-        <nav className="hidden md:flex gap-6 font-medium text-amber-900">
+        <nav className="hidden md:flex gap-6 font-medium text-white">
           {sections.map((item) => (
             <Link
               key={item.name}
               href={item.href}
               scroll={true}
-              className={`hover:text-green-700 transition-all duration-200 ${
-                activeSection === item.id ? "text-green-800 font-bold" : ""
+              className={`hover:text-amber-300 transition-all duration-200 ${
+                activeSection === item.id ? "text-amber-400 font-bold" : ""
               }`}
             >
               {item.name}
@@ -100,16 +98,16 @@ export default function Navbar() {
 
       {/* Menu Mobile */}
       {isOpen && (
-        <div className="md:hidden bg-white px-4 pb-4 border-t border-amber-200">
-          <nav className="flex flex-col space-y-2 font-medium text-amber-900">
+        <div className="md:hidden bg-green-900 px-4 pb-4 border-t border-green-800">
+          <nav className="flex flex-col space-y-2 font-medium text-white">
             {sections.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
                 scroll={true}
                 onClick={() => setIsOpen(false)}
-                className={`hover:text-green-700 transition-all duration-200 ${
-                  activeSection === item.id ? "text-green-800 font-bold" : ""
+                className={`hover:text-amber-300 transition-all duration-200 ${
+                  activeSection === item.id ? "text-amber-400 font-bold" : ""
                 }`}
               >
                 {item.name}

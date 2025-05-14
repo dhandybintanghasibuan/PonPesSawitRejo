@@ -23,7 +23,7 @@ const bgImages = [
 export default function Home() {
   const footerRef = useRef<HTMLElement | null>(null);
   const [showTopBtn, setShowTopBtn] = useState(false);
-  const [bgIndex, setBgIndex] = useState(0);  
+  const [bgIndex, setBgIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -53,9 +53,7 @@ export default function Home() {
         <div
           className="absolute inset-0 -z-10 bg-cover bg-center transition-all duration-1000"
           style={{ backgroundImage: `url(${bgImages[bgIndex]})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent backdrop-blur-sm" />
-        </div>
+        ></div>
 
         <div className="relative z-10 container mx-auto px-6 h-full flex items-center">
           <div className="w-full md:w-3/5 lg:w-1/2 bg-white/80 backdrop-blur-md p-8 rounded-lg shadow-lg border border-amber-100">
