@@ -78,7 +78,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Kolom 3 - Program Unggulan */}
+          {/* Kolom 3 - Program Lainnya */}
           <div>
             <h3 className="text-xl font-bold mb-4 text-white">
               Program Lainnya
@@ -86,6 +86,8 @@ export default function Footer() {
             <ul className="space-y-2 text-white">
               {[
                 { label: "Ekstrakurikuler", slug: "/ekstrakurikuler" },
+                { label: "Class Meet", slug: "/classmeet" },
+                { label: "Outing Class", slug: "/outingclass" },
               ].map((program) => (
                 <li key={program.slug}>
                   <Link
