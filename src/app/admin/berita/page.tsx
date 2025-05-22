@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
-import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus, FaThumbtack } from "react-icons/fa";
 import Linkify from "linkify-react";
 
 const supabase = createClient(
@@ -16,6 +16,8 @@ type NewsItem = {
   title: string;
   content: string;
   image_url?: string;
+  is_pinned?: boolean;
+  created_at?: string;
 };
 
 const linkifyOptions = {
@@ -31,6 +33,7 @@ export default function AdminNewsPage() {
     title: "",
     content: "",
     image_url: "",
+    is_pinned: false,
   });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -42,10 +45,28 @@ export default function AdminNewsPage() {
   const fetchNews = async () => {
     const { data, error } = await supabase
       .from("news")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("id, title, content, image_url, created_at, is_pinned");
 
-    if (!error && data) setNewsList(data);
+    if (error) {
+      console.error("Gagal memuat berita:", error.message);
+    } else {
+      const normalizedData = (data || []).map((item) => ({
+        ...item,
+        is_pinned: item.is_pinned ?? false,
+      }));
+
+      normalizedData.sort((a, b) => {
+        if (a.is_pinned === b.is_pinned) {
+          return (
+            new Date(b.created_at || "").getTime() -
+            new Date(a.created_at || "").getTime()
+          );
+        }
+        return a.is_pinned ? -1 : 1;
+      });
+
+      setNewsList(normalizedData);
+    }
   };
 
   const handleChange = (
@@ -89,8 +110,10 @@ export default function AdminNewsPage() {
     }
 
     const payload = {
-      ...formData,
+      title: formData.title,
+      content: formData.content,
       image_url: uploadedImageUrl,
+      is_pinned: formData.is_pinned || false,
     };
 
     let error;
@@ -116,7 +139,13 @@ export default function AdminNewsPage() {
       return;
     }
 
-    setFormData({ id: "", title: "", content: "", image_url: "" });
+    setFormData({
+      id: "",
+      title: "",
+      content: "",
+      image_url: "",
+      is_pinned: false,
+    });
     setImageFile(null);
     setEditingId(null);
     setFormVisible(false);
@@ -124,7 +153,13 @@ export default function AdminNewsPage() {
   };
 
   const handleEdit = (item: NewsItem) => {
-    setFormData(item);
+    setFormData({
+      id: item.id,
+      title: item.title,
+      content: item.content,
+      image_url: item.image_url || "",
+      is_pinned: item.is_pinned || false,
+    });
     setEditingId(item.id);
     setFormVisible(true);
   };
@@ -134,6 +169,19 @@ export default function AdminNewsPage() {
     fetchNews();
   };
 
+  const togglePin = async (id: string, currentStatus: boolean = false) => {
+    const { error } = await supabase
+      .from("news")
+      .update({ is_pinned: !currentStatus })
+      .eq("id", id);
+
+    if (error) {
+      alert("Gagal mengubah status pin.");
+    } else {
+      fetchNews();
+    }
+  };
+
   return (
     <section className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -141,7 +189,13 @@ export default function AdminNewsPage() {
         <button
           onClick={() => {
             setFormVisible(!formVisible);
-            setFormData({ id: "", title: "", content: "", image_url: "" });
+            setFormData({
+              id: "",
+              title: "",
+              content: "",
+              image_url: "",
+              is_pinned: false,
+            });
             setEditingId(null);
             setImageFile(null);
           }}
@@ -184,7 +238,6 @@ export default function AdminNewsPage() {
         </div>
       )}
 
-      {/* Tabel Berita */}
       <div className="overflow-x-auto bg-white rounded-lg shadow-md">
         <table className="w-full text-sm text-left text-gray-700">
           <thead className="text-xs uppercase bg-gray-100 text-gray-600">
@@ -215,7 +268,12 @@ export default function AdminNewsPage() {
                   )}
                 </td>
                 <td className="px-6 py-3 text-sm font-medium text-gray-900">
-                  {item.title}
+                  <div className="flex items-center gap-2">
+                    {item.title}
+                    {item.is_pinned && (
+                      <FaThumbtack className="text-yellow-500" title="Pinned" />
+                    )}
+                  </div>
                 </td>
                 <td className="px-6 py-3 text-sm text-gray-700 max-w-xs">
                   <Linkify options={linkifyOptions}>
@@ -225,7 +283,7 @@ export default function AdminNewsPage() {
                   </Linkify>
                 </td>
                 <td className="px-6 py-3 text-center">
-                  <div className="flex justify-center gap-3">
+                  <div className="flex flex-col items-center gap-2">
                     <button
                       onClick={() => handleEdit(item)}
                       className="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
@@ -237,6 +295,13 @@ export default function AdminNewsPage() {
                       className="text-red-600 hover:text-red-800 text-sm flex items-center gap-1"
                     >
                       <FaTrash /> Hapus
+                    </button>
+                    <button
+                      onClick={() => togglePin(item.id, item.is_pinned)}
+                      className="text-yellow-600 hover:text-yellow-800 text-sm flex items-center gap-1"
+                    >
+                      <FaThumbtack />
+                      {item.is_pinned ? "Unpin" : "Pin"}
                     </button>
                   </div>
                 </td>
