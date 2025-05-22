@@ -27,7 +27,7 @@ export default function NewsSection() {
       const { data, error } = await supabase
         .from("news")
         .select("id, title, content, image_url, created_at")
-        .order("created_at", { ascending: false })
+        .order("created_at", { ascending: true }) // ubah jadi true agar berita lama muncul dulu
         .limit(3);
 
       if (error) {
@@ -92,11 +92,9 @@ export default function NewsSection() {
                   </h3>
                   <p className="text-gray-700 text-sm flex-grow mb-4 line-clamp-3">
                     {item.content
-                      ? item.content.replace(/<[^>]+>/g, "").slice(0, 100) +
-                        "..."
+                      ? item.content.replace(/<[^>]+>/g, "").slice(0, 100) + "..."
                       : "Konten tidak tersedia."}
                   </p>
-                  {/* Tombol seperti sebelumnya */}
                   <div className="mt-auto">
                     <Link
                       href={`/berita/${encodeURIComponent(item.id)}`}
